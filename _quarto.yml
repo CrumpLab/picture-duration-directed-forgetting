@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: docs
+  resources: posters
+  render:
+    - "*.qmd"
+    - "*.Rmd"
+    - "!posters/"
 
 website:
   title: "picture-duration-directed-forgetting"
@@ -9,6 +14,10 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - href: posters/poster.html
+        text: Poster
+  sidebar:
+    contents: vignettes
 
 format:
   html:

@@ -1,0 +1,124 @@
+---
+title: "Experiments"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Experiments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This project currently involves two experiments. The design and motivation for each are described in the honors thesis manuscript. 
+
+If you are interested in participating in the experiments, then you can try them out here. There is no compensation for participation except for our appreciation that you have contributed to our research project. If you agree to participate and you complete the experiment, then your data will added to the public data repository in this project. All data that is collected is completely anonymous.
+
+We plan to leave these links here on a permanent basis. This will allow us to assess how the results stabilize across large groups of participants. 
+
+## Experiment 1: Mixed stimulus duration
+
+:::::{.card .border .border-2 .border-info}
+:::: {.row .g-0}
+::: {.col-md-2}
+:::: {.card-body}
+
+```{r, echo=FALSE,fig.align='center'}
+knitr::include_graphics("imgs/small_logo.png")
+```
+
+**Estimated time**:
+
+15-20 minutes
+
+::::
+:::
+
+::: {.col-md-10}
+:::: {.card-body}
+
+This is a directed forgetting task for pictures of natural scenes. You will be shown many pictures and asked to remember or forget each picture. Then you will be given a memory test.
+
+:::: {.row}
+::: {.col-md-6}
+
+**First Time?**
+
+Click this link to participate in the experiment
+
+<a class="btn btn-outline-info" href="https://experiments.crumplab.com/publix/4/start?batchId=27&generalSingle" role="button">Try Experiment (once only)</a>
+
+:::
+
+::: {.col-md-6}
+
+**Trying again?**
+
+We are interested in data from first-time attempts, so please click the first link (which you can do only once). But, if you want to try again, go for it here:
+
+<a class="btn btn-outline-info" href="https://experiments.crumplab.com/publix/4/start?batchId=28&generalMultiple" role="button">Try Experiment Again</a>
+
+:::
+::::
+
+
+::::
+:::
+::::
+:::::
+
+## Experiment 2: Blocked stimulus duration
+
+
+:::::{.card .border .border-2 .border-info}
+:::: {.row .g-0}
+::: {.col-md-2}
+:::: {.card-body}
+
+```{r, echo=FALSE,fig.align='center'}
+knitr::include_graphics("imgs/small_logo.png")
+```
+
+**Estimated time**:
+
+15-20 minutes
+
+::::
+:::
+
+::: {.col-md-10}
+:::: {.card-body}
+
+This is a directed forgetting task for pictures of natural scenes. You will be shown many pictures and asked to remember or forget each picture. Then you will be given a memory test.
+
+:::: {.row}
+::: {.col-md-6}
+
+**First Time?**
+
+Click this link to participate in the experiment
+
+<a class="btn btn-outline-info" href="https://experiments.crumplab.com/publix/12/start?batchId=29&generalSingle" role="button">Try Experiment (once only)</a>
+
+:::
+
+::: {.col-md-6}
+
+**Trying again?**
+
+We are interested in data from first-time attempts, so please click the first link (which you can do only once). But, if you want to try again, go for it here:
+
+<a class="btn btn-outline-info" href="https://experiments.crumplab.com/publix/12/start?batchId=30&generalMultiple" role="button">Try Experiment Again</a>
+
+:::
+::::
+
+
+::::
+:::
+::::
+:::::

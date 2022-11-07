@@ -1,0 +1,9 @@
+
+## Try and forget this image: The role of stimulus duration in directed forgetting for natural scenes
+
+**Currently under development**
+
+The goal of this project repository is to extend [Patrick Ihejirika's honor thesis project](https://crumplab.com/PatrickHonorsThesis/index.html) in a reproducible form using quarto, and to extend the thesis into a larger project with additional collaborators. 
+
+In theory this entire project is shared in a computationally reproducible format. The github repository for this website contains all of the source code, the original data, the data analysis, and the experiment scripts used to run the experiment. 
+

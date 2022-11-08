@@ -1,25 +1,31 @@
 ---
-title: 'Try and forget this image: The role of stimulus duration in directed forgetting for natural scenes'
+title: 'Try to Forget This Image: The Role of Stimulus Duration in Directed Forgetting for Natural Scenes. '
 author:
+  - name: Drew Shives
+    affil: 1
   - name: Patrick Ihejirika
+    affil: 1
+  - name: Wesley Huang
     affil: 1
   - name: Matthew J. C. Crump
     affil: 1
     orcid: '0000-0002-5612-0090'
 affiliation:
   - num: 1
-    address: Department of Psychology, Brooklyn College of CUNY
+    address: Brooklyn College, CUNY
+  - num: 2
+    address: The Graduate Center, CUNY
 column_numbers: 3
 logoright_name: imgs/qr_more.png
 logoleft_name: imgs/BC_logo.png
-poster_height: "15.75in" #"38in"
-poster_width: "28in" #"45in"
-title_textsize: "280%"
-author_textsize: "170%"
-affiliation_textsize: "150%"
-body_textsize: "175%"
-sectitle_textsize: "175%"
-sectitle2_textsize: "125%"
+poster_height: "42in" #"38in"
+poster_width: "63in" #"45in"
+title_textsize: "700%"
+author_textsize: "400%"
+affiliation_textsize: "200%"
+body_textsize: "250%"
+sectitle_textsize: "350%"
+sectitle2_textsize: "350%"
 primary_colour: "#BEAED4"
 secondary_colour: "#666666"
 accent_colour: "#F0027F"

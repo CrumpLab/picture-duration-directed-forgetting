@@ -1,25 +1,31 @@
 ---
-title: 'Try and forget this image: The role of stimulus duration in directed forgetting for natural scenes'
+title: 'Try to Forget This Image: <br/> The Role of Stimulus Duration in Directed Forgetting for Natural Scenes.'
 author:
+  - name: Drew Shives
+    affil: 1
   - name: Patrick Ihejirika
+    affil: 1
+  - name: Wesley Huang
     affil: 1
   - name: Matthew J. C. Crump
     affil: 1
     orcid: '0000-0002-5612-0090'
 affiliation:
   - num: 1
-    address: Department of Psychology, Brooklyn College of CUNY
+    address: Brooklyn College, CUNY
+  - num: 2
+    address: The Graduate Center, CUNY
 column_numbers: 3
-logoright_name: imgs/qr_more.png
+logoright_name: imgs/qrcode.jpg
 logoleft_name: imgs/BC_logo.png
-poster_height: "15.75in" #"38in"
-poster_width: "28in" #"45in"
-title_textsize: "280%"
-author_textsize: "170%"
-affiliation_textsize: "150%"
-body_textsize: "175%"
-sectitle_textsize: "175%"
-sectitle2_textsize: "125%"
+poster_height: "42in" #"38in"
+poster_width: "63in" #"45in"
+title_textsize: "450%"
+author_textsize: "200%"
+affiliation_textsize: "130%"
+body_textsize: "250%"
+sectitle_textsize: "270%"
+sectitle2_textsize: "250%"
 primary_colour: "#BEAED4"
 secondary_colour: "#666666"
 accent_colour: "#F0027F"
@@ -46,13 +52,13 @@ library(ggplot2)
 
 Directed forgetting research investigates people's ability to intentionally forget information [@macleodDirectedForgetting1998]. For example, in a memory task for words participants are instructed to remember some words and forget others for a later memory test. A directed forgetting effect is observed when people show worse memory for the words they attempted to forget. Directed forgetting tasks often use word stimuli, and the limitations of intentional forgetting for other kinds of information remain unclear.
 
-We are investigating directed forgetting for pictures. The picture-superiority effect suggests that pictures are inherently more memorable than words [@gehring1976recognition].  @standingLearning10000Pictures1973 showed that people had little difficulty in memorizing over 10,000 pictures.
-
-
 # Can people intentionally forget memorable picture information?
 
-## Prior work: Limited Directed Forgetting for Pictures
+The picture-superiority effect suggests that pictures are inherently more memorable than words [@gehring1976recognition], and people have a large capacity for remembering pictures [@standingLearning10000Pictures1973].
 
+@ahmadDirectedForgettingCategorised2019 showed small directed forgetting effects for pictures.
+
+## Prior work: Limited Directed Forgetting for Pictures
 
 :::: {.row}
 ::: {.col-md-6 .draw-border}
@@ -95,6 +101,7 @@ ggplot(tan_et_al,aes(x=Lure.Type, y=Proportion.Correct,fill=Encoding.Cue))+
 
 
 - They found a small directed forgetting effect. 
+
 - The effect was only observed for items given a more difficult recognition test, involving a similar (exemplar) lure.
 
 :::
@@ -109,14 +116,19 @@ ggplot(tan_et_al,aes(x=Lure.Type, y=Proportion.Correct,fill=Encoding.Cue))+
 
 ## Hypothesis 
 
-1. We assume that the magnitude of directed forgetting is influenced by stimulus encoding strength:
+We **assume** the magnitude of directed forgetting is influenced by stimulus encoding strength
+
+::: {.smaller}
+
  - Strongly encoded stimuli are harder to forget
- - Wakly encoded stimuli are easier to forget
  
-2. We propose that decreasing stimulus duration during encoding will make pictures less well encoded, and easier to forget
+ - Weakly encoded stimuli are easier to forget
+ 
+We **assume** decreasing stimulus duration will make pictures less well encoded, and easier to forget
 
-3. We predict the directed forgetting effect will increase as stimulus duration decreases.
+We **predict** increased directed forgetting as stimulus duration decreases.
 
+:::
 
 :::
 
@@ -141,27 +153,33 @@ power$power_analysis$prediction_graph +
 ::::
 
 
-# Methods: We conducted a replication of Ahmad et al. (2019) and manipulated stimulus duration during encoding to reduce picture memorability
+# Methods: 3 close replications of Ahmad et al. (2019) with stimulus duration manipulation to reduce picture memorability
 
 :::: {.row}
 ::: {.col-md-6}
 
-- 2 close replications of @ahmadDirectedForgettingCategorised2019.
-- used the same set of natural scenes
-- 47 and 45 participants recruited from Amazon's Mechanical Turk
+::: {.smaller}
+
+Stimulus duration was 2, 1, or .5 seconds.
+
+:::
 
 :::
 
 ::: {.col-md-6}
 
-- Programmed the experiment using JsPsych [@de2015jspsych]
-- Participants completed the experiment in their web-browser
+::: {.smaller}
+
+Online experiments using JsPsych [@de2015jspsych]
+
+
+:::
 
 :::
 ::::
 
 ```{r, out.width="100%"}
-knitr::include_graphics("imgs/Methods.png")
+knitr::include_graphics("imgs/E123_methods.png")
 ```
 
 
@@ -170,7 +188,7 @@ knitr::include_graphics("imgs/Methods.png")
 :::: {.row}
 ::: {.col-md-6}
 
-## E1 Mixed
+## E1 Mixed (N=47 MTURK)
 
 ```{r, out.width = '100%'}
 E1 <- new.env()
@@ -188,7 +206,7 @@ E1$Accuracy$graphs$figure+
 
 ::: {.col-md-6}
 
-## E2 Blocked
+## E2 Blocked (N=45 CUNY)
 
 ```{r, out.width = '100%'}
 E2 <- new.env()
@@ -208,7 +226,7 @@ E2$Accuracy$graphs$figure+
 :::: {.row}
 ::: {.col-md-6}
 
-## E3 N=17 (ongoing)
+## E3 (N=17 ongoing)
 
 ```{r, out.width = '100%'}
 E3 <- new.env()
@@ -228,9 +246,15 @@ E3$Accuracy$graphs$figure+
 
 ## Conclusions and Next Steps
 
-1. We did not replicate @ahmadDirectedForgettingCategorised2019
-2. Our power analysis suggests we need over 200 subjects to reliably detect the higher-order interaction
-3. Online experiment design should be considered.
+::: {.smaller}
+
+1. No consistent directed forgetting effects
+
+2. Our power analysis suggests we need many more subjects to detect interactions with stimulus duration
+
+3. We are tuning the task instructions for web-browser interactions to encourage participants to engage with instructional cues.
+
+:::
 
 :::
 ::::
@@ -240,9 +264,15 @@ E3$Accuracy$graphs$figure+
 
 
 
-## Project website <https://www.crumplab.com/PatrickHonorsThesis/>
+## Project website
 
-This poster was prepared as a computationally reproducible project using [vertical](https://www.crumplab.com/vertical/) [@vuorre2021sharing], and several libraries from the open-source community.
+Click the QR code, or go here:
+
+<https://crumplab.com/picture-duration-directed-forgetting/>
+
+This poster was prepared as a computationally reproducible project using a [vertical](https://www.crumplab.com/vertical/) [@vuorre2021sharing] approach, and several other libraries from the open-source community.
+
+This website contains the source code for this poster, and the most up-to-date analyses and project assets.
 
 ```{r, include=FALSE}
 knitr::write_bib(c('knitr','rmarkdown','posterdown','pagedown'), 'packages.bib')

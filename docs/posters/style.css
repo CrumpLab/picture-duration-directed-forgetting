@@ -17,7 +17,7 @@ img {
 p {
   margin-top: .5em!important;
   margin-bottom: 0!important;
-  font-size: 120%!important;
+  font-size: 200%!important;
 }
 
 .poster_title h3 > sup {
@@ -48,13 +48,13 @@ p {
 
 .poster_title h5 {
   color: var(--secondary)!important;
-  font-size: 150%!important;
+  font-size: 185%!important;
 }
 
 .poster_body h2 {
 text-align: left;
 color: var(--secondary)!important;
-font-size: 150%!important;
+font-size: 300%!important;
 border: 1mm solid var(--secondary);
 background-color: var(--lightaccent);
 border-radius: 4mm 0mm;

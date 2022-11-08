@@ -17,6 +17,10 @@ img {
 p {
   margin-top: .5em!important;
   margin-bottom: 0!important;
+  font-size: 250%!important;
+}
+
+::marker {
   font-size: 200%!important;
 }
 
@@ -54,7 +58,7 @@ p {
 .poster_body h2 {
 text-align: left;
 color: var(--secondary)!important;
-font-size: 300%!important;
+font-size: 250%!important;
 border: 1mm solid var(--secondary);
 background-color: var(--lightaccent);
 border-radius: 4mm 0mm;
@@ -83,3 +87,12 @@ font-weight: normal;
 .darkaccent-colour {
   background-color: var(--darkaccent)!important;
 }
+
+.smaller {
+  font-size: 80%;
+}
+
+.references {
+  font-size: 135%;
+}
+

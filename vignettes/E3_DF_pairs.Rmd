@@ -30,7 +30,8 @@ library(data.table)
 
 ```{r}
 # Read the text file from JATOS ...
-read_file('data/E3/jatos_results_20221103143242.txt') %>%
+#read_file('data/E3/jatos_results_20221103143242.txt') %>%
+read_file('data/E3/jatos_results_20221220155536.txt') %>%
   # ... split it into lines ...
   str_split('\n') %>% first() %>%
   # ... filter empty rows ...
@@ -82,21 +83,21 @@ study_accuracy <- all_data %>%
          trial_type == "html-slider-response",
          is.na(rt) == FALSE) %>%
   mutate(response = as.numeric(unlist(response))) %>%
-  mutate(correct = case_when(encoding_instruction == "R" && response > 50 ~ TRUE,
-                             encoding_instruction == "R" && response < 50 ~ FALSE,
-                             encoding_instruction == "F" && response > 50 ~ FALSE,
-                             encoding_instruction == "F" && response < 50 ~ TRUE)) %>%
+  mutate(correct = case_when(encoding_instruction == "R" & response > 50 ~ TRUE,
+                             encoding_instruction == "R" & response <= 50 ~ FALSE,
+                             encoding_instruction == "F" & response >= 50 ~ FALSE,
+                             encoding_instruction == "F" & response < 50 ~ TRUE)) %>%
   filter(is.na(correct) == FALSE) %>%
   group_by(ID)%>%
   summarize(mean_correct = mean(correct))
 
 study_excluded_subjects <- study_accuracy %>%
-  filter(mean_correct < .75) %>%
+  filter(mean_correct < .55) %>%
   pull(ID)
 
 ggplot(study_accuracy, aes(x=mean_correct))+
   coord_cartesian(xlim=c(0,1))+
-  geom_vline(xintercept=.75)+
+  geom_vline(xintercept=.55)+
   geom_histogram()+
   ggtitle("Histogram of mean correct responses \n for each subject during study phase")
 
@@ -183,11 +184,11 @@ test_mean_novel_accuracy <- all_data %>%
   summarize(mean_correct = mean(correct))
 
 test_mean_novel_accuracy_excluded <- test_mean_novel_accuracy %>%
-  filter(mean_correct < .4) %>%
+  filter(mean_correct < .55) %>%
   pull(ID)
 
 ggplot(test_mean_novel_accuracy, aes(x=mean_correct))+
-  geom_vline(xintercept=.4)+
+  geom_vline(xintercept=.55)+
   geom_histogram()+
   ggtitle("Histogram of mean accuracy for novel lures \n for each subject during test phase")
 

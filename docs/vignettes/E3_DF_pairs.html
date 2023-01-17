@@ -302,13 +302,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="import-data">Import Data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the text file from JATOS ...</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_file</span>(<span class="st">'data/E3/jatos_results_20221103143242.txt'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... split it into lines ...</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">'</span><span class="sc">\n</span><span class="st">'</span>) <span class="sc">%&gt;%</span> <span class="fu">first</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... filter empty rows ...</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">discard</span>(<span class="cf">function</span>(x) x <span class="sc">==</span> <span class="st">''</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... parse JSON into a data.frame</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(fromJSON, <span class="at">flatten=</span>T) <span class="ot">-&gt;</span> all_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#read_file('data/E3/jatos_results_20221103143242.txt') %&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">read_file</span>(<span class="st">'data/E3/jatos_results_20221212154552.txt'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... split it into lines ...</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">'</span><span class="sc">\n</span><span class="st">'</span>) <span class="sc">%&gt;%</span> <span class="fu">first</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... filter empty rows ...</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">discard</span>(<span class="cf">function</span>(x) x <span class="sc">==</span> <span class="st">''</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... parse JSON into a data.frame</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(fromJSON, <span class="at">flatten=</span>T) <span class="ot">-&gt;</span> all_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="demographics" class="level2">
@@ -330,7 +331,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>factor_demographics <span class="ot">&lt;-</span> <span class="fu">apply</span>(demographics[<span class="sc">-</span><span class="dv">1</span>], <span class="dv">2</span>, table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A total of 17 participants were recruited from Amazon’s Mechanical Turk. Mean age was 19.1 (range = 18 to 22 ). There were 9 females, and 8 males. There were 15 right-handed participants, and NA left or both handed participants. 10 participants reported normal vision, and 5 participants reported corrected-to-normal vision. 14 participants reported English as a first language, and 3 participants reported English as a second language.</p>
+<p>A total of 26 participants were recruited from Amazon’s Mechanical Turk. Mean age was 19 (range = 18 to 22 ). There were 16 females, and 10 males. There were 24 right-handed participants, and NA left or both handed participants. 15 participants reported normal vision, and 8 participants reported corrected-to-normal vision. 22 participants reported English as a first language, and 4 participants reported English as a second language.</p>
 </section>
 <section id="pre-processing" class="level2">
 <h2 class="anchored" data-anchor-id="pre-processing">Pre-processing</h2>
@@ -455,11 +456,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_correct =</span> <span class="fu">mean</span>(correct))</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>test_mean_novel_accuracy_excluded <span class="ot">&lt;-</span> test_mean_novel_accuracy <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mean_correct <span class="sc">&lt;</span> .<span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mean_correct <span class="sc">&lt;</span> .<span class="dv">55</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(ID)</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(test_mean_novel_accuracy, <span class="fu">aes</span>(<span class="at">x=</span>mean_correct))<span class="sc">+</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>.<span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>.<span class="dv">55</span>)<span class="sc">+</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histogram of mean accuracy for novel lures </span><span class="sc">\n</span><span class="st"> for each subject during test phase"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -477,11 +478,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(all_excluded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code>[1] 2</code></pre>
 </div>
 </div>
 <p>Our participants were recruited online and completed the experiment from a web browser. Our experiment script requests that participants attempt the task to the best of their ability. Nevertheless, it is possible that participants complete the experiment and submit data without attempting to complete the task as directed. We developed a set of criteria to exclude participants whose performance indicated they were not attempting the task as instructed. These criteria also allowed us to confirm that the participants we included in the analysis did attempt the task as instructed to the best of their ability. We adopted the following five criteria:</p>
-<p>First, during the encoding phase participants responded to each instructional cue (to remember or forget the picture on each trial) by pressing “R” or “F” on the keyboard. This task demand further served as an attentional check. We excluded participants who scored lower than 75% correct on instructional cue identification responses. Second, participants who did not respond on more than 25% of trials in the recognition test were excluded. Third, we measured response bias (choosing the left or right picture) during the recognition test, and excluded participants who made 75% of their responses to one side (indicating they were repeatedly pressing the same button on each trial). Fourth, we excluded participants whose mean reaction time during the recognition test was less than 300ms, indicating they were pressing the buttons as fast as possible without making a recognition decision. Finally, we computed mean accuracy for the novel lure condition for all participants, and excluded participants whose mean accuracy was less than 55% for those items. All together 0 participants were excluded.</p>
+<p>First, during the encoding phase participants responded to each instructional cue (to remember or forget the picture on each trial) by pressing “R” or “F” on the keyboard. This task demand further served as an attentional check. We excluded participants who scored lower than 75% correct on instructional cue identification responses. Second, participants who did not respond on more than 25% of trials in the recognition test were excluded. Third, we measured response bias (choosing the left or right picture) during the recognition test, and excluded participants who made 75% of their responses to one side (indicating they were repeatedly pressing the same button on each trial). Fourth, we excluded participants whose mean reaction time during the recognition test was less than 300ms, indicating they were pressing the buttons as fast as possible without making a recognition decision. Finally, we computed mean accuracy for the novel lure condition for all participants, and excluded participants whose mean accuracy was less than 55% for those items. All together 2 participants were excluded.</p>
 </section>
 </section>
 <section id="accuracy-analysis" class="level1">
@@ -649,121 +650,121 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">3.1130602</td>
-<td style="text-align: right;">0.1945663</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">3.8689475</td>
+<td style="text-align: right;">0.1682151</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0.0091935</td>
-<td style="text-align: right;">0.0045967</td>
-<td style="text-align: right;">0.2608783</td>
-<td style="text-align: right;">0.7719972</td>
+<td style="text-align: right;">0.0012020</td>
+<td style="text-align: right;">0.0006010</td>
+<td style="text-align: right;">0.0273422</td>
+<td style="text-align: right;">0.9730440</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">0.5638460</td>
-<td style="text-align: right;">0.0176202</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">1.0111165</td>
+<td style="text-align: right;">0.0219808</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_instruction</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0.0160771</td>
-<td style="text-align: right;">0.0160771</td>
-<td style="text-align: right;">1.0135683</td>
-<td style="text-align: right;">0.3290333</td>
+<td style="text-align: right;">0.0216320</td>
+<td style="text-align: right;">0.0216320</td>
+<td style="text-align: right;">1.3938997</td>
+<td style="text-align: right;">0.2498137</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">0.2537895</td>
-<td style="text-align: right;">0.0158618</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.3569382</td>
+<td style="text-align: right;">0.0155191</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">test_condition</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.6157060</td>
-<td style="text-align: right;">1.6157060</td>
-<td style="text-align: right;">32.8642299</td>
-<td style="text-align: right;">0.0000308</td>
+<td style="text-align: right;">2.5511640</td>
+<td style="text-align: right;">2.5511640</td>
+<td style="text-align: right;">51.4151012</td>
+<td style="text-align: right;">0.0000003</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">0.7866089</td>
-<td style="text-align: right;">0.0491631</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">1.1412362</td>
+<td style="text-align: right;">0.0496190</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:encoding_instruction</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0.0262066</td>
-<td style="text-align: right;">0.0131033</td>
-<td style="text-align: right;">0.8625309</td>
-<td style="text-align: right;">0.4316737</td>
+<td style="text-align: right;">0.0229051</td>
+<td style="text-align: right;">0.0114526</td>
+<td style="text-align: right;">0.7442065</td>
+<td style="text-align: right;">0.4807442</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">0.4861345</td>
-<td style="text-align: right;">0.0151917</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0.7078927</td>
+<td style="text-align: right;">0.0153890</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:test_condition</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0.0240190</td>
-<td style="text-align: right;">0.0120095</td>
-<td style="text-align: right;">0.8095293</td>
-<td style="text-align: right;">0.4539739</td>
+<td style="text-align: right;">0.0928499</td>
+<td style="text-align: right;">0.0464250</td>
+<td style="text-align: right;">1.8154084</td>
+<td style="text-align: right;">0.1742398</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">0.4747249</td>
-<td style="text-align: right;">0.0148352</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">1.1763459</td>
+<td style="text-align: right;">0.0255727</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_instruction:test_condition</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0.0176031</td>
-<td style="text-align: right;">0.0176031</td>
-<td style="text-align: right;">0.5505816</td>
-<td style="text-align: right;">0.4688335</td>
+<td style="text-align: right;">0.0197342</td>
+<td style="text-align: right;">0.0197342</td>
+<td style="text-align: right;">0.5849780</td>
+<td style="text-align: right;">0.4521445</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">0.5115482</td>
-<td style="text-align: right;">0.0319718</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.7759046</td>
+<td style="text-align: right;">0.0337350</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:encoding_instruction:test_condition</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0.1241252</td>
-<td style="text-align: right;">0.0620626</td>
-<td style="text-align: right;">3.1030417</td>
-<td style="text-align: right;">0.0586515</td>
+<td style="text-align: right;">0.1357053</td>
+<td style="text-align: right;">0.0678526</td>
+<td style="text-align: right;">4.1481441</td>
+<td style="text-align: right;">0.0220657</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">0.6400183</td>
-<td style="text-align: right;">0.0200006</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0.7524379</td>
+<td style="text-align: right;">0.0163573</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
@@ -787,18 +788,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">500</td>
-<td style="text-align: right;">0.716</td>
-<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.014</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
-<td style="text-align: right;">0.707</td>
-<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.730</td>
+<td style="text-align: right;">0.014</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
-<td style="text-align: right;">0.737</td>
-<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.742</td>
+<td style="text-align: right;">0.014</td>
 </tr>
 </tbody>
 </table>
@@ -816,13 +817,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">0.715</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.012</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">0.725</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.737</td>
+<td style="text-align: right;">0.012</td>
 </tr>
 </tbody>
 </table>
@@ -840,13 +841,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.633</td>
-<td style="text-align: right;">0.015</td>
+<td style="text-align: right;">0.640</td>
+<td style="text-align: right;">0.013</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.807</td>
-<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.826</td>
+<td style="text-align: right;">0.010</td>
 </tr>
 </tbody>
 </table>
@@ -872,38 +873,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">0.703</td>
-<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.723</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">0.729</td>
-<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.731</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">0.715</td>
-<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.738</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">0.700</td>
-<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.723</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">0.726</td>
-<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">0.747</td>
-<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.756</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 </tbody>
 </table>
@@ -923,38 +924,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.626</td>
-<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.646</td>
+<td style="text-align: right;">0.022</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.806</td>
-<td style="text-align: right;">0.021</td>
+<td style="text-align: right;">0.808</td>
+<td style="text-align: right;">0.018</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.632</td>
-<td style="text-align: right;">0.026</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1000</td>
-<td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.782</td>
+<td style="text-align: right;">0.648</td>
 <td style="text-align: right;">0.022</td>
 </tr>
+<tr class="even">
+<td style="text-align: right;">1000</td>
+<td style="text-align: left;">novel</td>
+<td style="text-align: right;">0.812</td>
+<td style="text-align: right;">0.018</td>
+</tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.641</td>
-<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.625</td>
+<td style="text-align: right;">0.022</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.832</td>
-<td style="text-align: right;">0.020</td>
+<td style="text-align: right;">0.858</td>
+<td style="text-align: right;">0.016</td>
 </tr>
 </tbody>
 </table>
@@ -974,26 +975,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.613</td>
-<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.621</td>
+<td style="text-align: right;">0.018</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.810</td>
-<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.831</td>
+<td style="text-align: right;">0.014</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.652</td>
-<td style="text-align: right;">0.021</td>
+<td style="text-align: right;">0.657</td>
+<td style="text-align: right;">0.017</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.804</td>
-<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">0.821</td>
+<td style="text-align: right;">0.014</td>
 </tr>
 </tbody>
 </table>
@@ -1022,85 +1023,85 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.578</td>
-<td style="text-align: right;">0.038</td>
+<td style="text-align: right;">0.626</td>
+<td style="text-align: right;">0.031</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.822</td>
-<td style="text-align: right;">0.029</td>
+<td style="text-align: right;">0.818</td>
+<td style="text-align: right;">0.025</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.672</td>
-<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">0.665</td>
+<td style="text-align: right;">0.030</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
-<td style="text-align: left;">R</td>
-<td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.789</td>
-<td style="text-align: right;">0.032</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">1000</td>
-<td style="text-align: left;">F</td>
-<td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.661</td>
-<td style="text-align: right;">0.037</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1000</td>
-<td style="text-align: left;">F</td>
-<td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.767</td>
-<td style="text-align: right;">0.032</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">1000</td>
-<td style="text-align: left;">R</td>
-<td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.605</td>
-<td style="text-align: right;">0.037</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
 <td style="text-align: right;">0.798</td>
+<td style="text-align: right;">0.026</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1000</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">exemplar</td>
+<td style="text-align: right;">0.667</td>
 <td style="text-align: right;">0.031</td>
 </tr>
+<tr class="even">
+<td style="text-align: right;">1000</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">novel</td>
+<td style="text-align: right;">0.803</td>
+<td style="text-align: right;">0.025</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1000</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">exemplar</td>
+<td style="text-align: right;">0.631</td>
+<td style="text-align: right;">0.031</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1000</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">novel</td>
+<td style="text-align: right;">0.823</td>
+<td style="text-align: right;">0.025</td>
+</tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.600</td>
-<td style="text-align: right;">0.039</td>
+<td style="text-align: right;">0.571</td>
+<td style="text-align: right;">0.033</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.839</td>
-<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">0.871</td>
+<td style="text-align: right;">0.021</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">0.678</td>
-<td style="text-align: right;">0.035</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2000</td>
-<td style="text-align: left;">R</td>
-<td style="text-align: left;">novel</td>
-<td style="text-align: right;">0.825</td>
+<td style="text-align: right;">0.675</td>
 <td style="text-align: right;">0.030</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2000</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">novel</td>
+<td style="text-align: right;">0.844</td>
+<td style="text-align: right;">0.024</td>
 </tr>
 </tbody>
 </table>
@@ -1215,12 +1216,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co">#t[encoding_stimulus_time==500 &amp; encoding_instruction == "F"]$mean_correct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Proportion correct for each subject in each condition was submitted to a 3 (Encoding Duration: 500ms, 1000ms, 2000ms) x 2 (Encoding Instruction: Forget vs.&nbsp;Remember) x 2 (Lure type: Novel vs.&nbsp;Exemplar) fully repeated measures ANOVA. For completeness, each main effect and higher-order interaction is described in turn.</p>
-<p>The main effect of encoding duration was significant, <span class="math inline">\(F(2, 32) = 0.26\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .772\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .001\)</span>. Proportion correct was lowest for the 500 ms duration (M = 0.716, SEM = 0.017), and higher for the 1000 ms (M = 0.707, SEM = 0.017), and 2000 ms (M = 0.737, SEM = 0.017) stimulus durations.</p>
-<p>The main effect of encoding instruction was not significant, <span class="math inline">\(F(1, 16) = 1.01\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .329\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .002\)</span>. Proportion correct was similar for remember cues (M = 0.725, SEM = 0.014) and forget cues (M = 0.715, SEM = 0.014).</p>
-<p>The main effect of lure type was significant, <span class="math inline">\(F(1, 16) = 32.86\)</span>, <span class="math inline">\(\mathit{MSE} = 0.05\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .191\)</span>. Proportion correct was higher for novel lures (M = 0.807, SEM = 0.012) than exemplar lures (M = 0.633, SEM = 0.015).</p>
-<p>The main question of interest was whether directing forgetting would vary across the encoding duration times. The interaction between encoding instruction and encoding duration was not significant, <span class="math inline">\(F(2, 32) = 0.86\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .432\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .004\)</span>.</p>
-<p>Paired sample t-tests were used to assess the directed forgetting effect at each encoding duration. The directed forgetting effect is taken as the difference between proportion correct for remember minus forget items. At 500 ms, the directed forgetting effect was not significant, <span class="math inline">\(M = 0.03\)</span>, 95% CI <span class="math inline">\([-0.03, 0.09]\)</span>, <span class="math inline">\(t(16) = 1.05\)</span>, <span class="math inline">\(p = .309\)</span>. At 1000ms, the directed forgetting effect was not significant, <span class="math inline">\(M = -0.01\)</span>, 95% CI <span class="math inline">\([-0.07, 0.04]\)</span>, <span class="math inline">\(t(16) = -0.51\)</span>, <span class="math inline">\(p = .616\)</span>. And, at 2000 ms, the directed forgetting effect was again not detected, <span class="math inline">\(M = 0.04\)</span>, 95% CI <span class="math inline">\([-0.03, 0.11]\)</span>, <span class="math inline">\(t(16) = 1.11\)</span>, <span class="math inline">\(p = .285\)</span>.</p>
-<p>The encoding duration by lure type interaction was not significnat, <span class="math inline">\(F(2, 32) = 0.81\)</span>, <span class="math inline">\(\mathit{MSE} = 0.01\)</span>, <span class="math inline">\(p = .454\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .004\)</span>. The encoding instruction by lure type interaction was not significant, <span class="math inline">\(F(1, 16) = 0.55\)</span>, <span class="math inline">\(\mathit{MSE} = 0.03\)</span>, <span class="math inline">\(p = .469\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .003\)</span>. Similarly, the interaction between encoding duration, instruction, and lure type was not significant, <span class="math inline">\(F(2, 32) = 3.10\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .059\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .018\)</span>.</p>
+<p>The main effect of encoding duration was significant, <span class="math inline">\(F(2, 46) = 0.03\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .973\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .000\)</span>. Proportion correct was lowest for the 500 ms duration (M = 0.727, SEM = 0.014), and higher for the 1000 ms (M = 0.73, SEM = 0.014), and 2000 ms (M = 0.742, SEM = 0.014) stimulus durations.</p>
+<p>The main effect of encoding instruction was not significant, <span class="math inline">\(F(1, 23) = 1.39\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .250\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .002\)</span>. Proportion correct was similar for remember cues (M = 0.737, SEM = 0.012) and forget cues (M = 0.729, SEM = 0.012).</p>
+<p>The main effect of lure type was significant, <span class="math inline">\(F(1, 23) = 51.42\)</span>, <span class="math inline">\(\mathit{MSE} = 0.05\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .207\)</span>. Proportion correct was higher for novel lures (M = 0.826, SEM = 0.01) than exemplar lures (M = 0.64, SEM = 0.013).</p>
+<p>The main question of interest was whether directing forgetting would vary across the encoding duration times. The interaction between encoding instruction and encoding duration was not significant, <span class="math inline">\(F(2, 46) = 0.74\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .481\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .002\)</span>.</p>
+<p>Paired sample t-tests were used to assess the directed forgetting effect at each encoding duration. The directed forgetting effect is taken as the difference between proportion correct for remember minus forget items. At 500 ms, the directed forgetting effect was not significant, <span class="math inline">\(M = 0.02\)</span>, 95% CI <span class="math inline">\([-0.03, 0.07]\)</span>, <span class="math inline">\(t(23) = 0.87\)</span>, <span class="math inline">\(p = .392\)</span>. At 1000ms, the directed forgetting effect was not significant, <span class="math inline">\(M = -0.01\)</span>, 95% CI <span class="math inline">\([-0.06, 0.05]\)</span>, <span class="math inline">\(t(23) = -0.25\)</span>, <span class="math inline">\(p = .802\)</span>. And, at 2000 ms, the directed forgetting effect was again not detected, <span class="math inline">\(M = 0.04\)</span>, 95% CI <span class="math inline">\([-0.02, 0.09]\)</span>, <span class="math inline">\(t(23) = 1.41\)</span>, <span class="math inline">\(p = .173\)</span>.</p>
+<p>The encoding duration by lure type interaction was not significnat, <span class="math inline">\(F(2, 46) = 1.82\)</span>, <span class="math inline">\(\mathit{MSE} = 0.03\)</span>, <span class="math inline">\(p = .174\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .009\)</span>. The encoding instruction by lure type interaction was not significant, <span class="math inline">\(F(1, 23) = 0.58\)</span>, <span class="math inline">\(\mathit{MSE} = 0.03\)</span>, <span class="math inline">\(p = .452\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .002\)</span>. Similarly, the interaction between encoding duration, instruction, and lure type was not significant, <span class="math inline">\(F(2, 46) = 4.15\)</span>, <span class="math inline">\(\mathit{MSE} = 0.02\)</span>, <span class="math inline">\(p = .022\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .014\)</span>.</p>
 </section>
 </section>
 <section id="reaction-time-analysis" class="level1">
@@ -1310,10 +1311,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
-<col style="width: 55%">
+<col style="width: 54%">
 <col style="width: 2%">
+<col style="width: 12%">
 <col style="width: 11%">
-<col style="width: 10%">
 <col style="width: 10%">
 <col style="width: 9%">
 </colgroup>
@@ -1330,121 +1331,121 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">49350162.10</td>
-<td style="text-align: right;">3084385.13</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">85836700.351</td>
+<td style="text-align: right;">3732030.450</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">72701.12</td>
-<td style="text-align: right;">36350.56</td>
-<td style="text-align: right;">0.3413044</td>
-<td style="text-align: right;">0.7133985</td>
+<td style="text-align: right;">107013.567</td>
+<td style="text-align: right;">53506.783</td>
+<td style="text-align: right;">0.5007513</td>
+<td style="text-align: right;">0.6093405</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">3408153.64</td>
-<td style="text-align: right;">106504.80</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">4915238.115</td>
+<td style="text-align: right;">106853.003</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_instruction</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">382264.12</td>
-<td style="text-align: right;">382264.12</td>
-<td style="text-align: right;">4.5671308</td>
-<td style="text-align: right;">0.0483789</td>
+<td style="text-align: right;">65432.948</td>
+<td style="text-align: right;">65432.948</td>
+<td style="text-align: right;">0.6048152</td>
+<td style="text-align: right;">0.4446732</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">1339183.45</td>
-<td style="text-align: right;">83698.97</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2488293.434</td>
+<td style="text-align: right;">108186.671</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">test_condition</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">3004083.08</td>
-<td style="text-align: right;">3004083.08</td>
-<td style="text-align: right;">26.2757694</td>
-<td style="text-align: right;">0.0001016</td>
+<td style="text-align: right;">4304790.494</td>
+<td style="text-align: right;">4304790.494</td>
+<td style="text-align: right;">44.0665483</td>
+<td style="text-align: right;">0.0000009</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">1829264.39</td>
-<td style="text-align: right;">114329.02</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2246833.145</td>
+<td style="text-align: right;">97688.398</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:encoding_instruction</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">123407.60</td>
-<td style="text-align: right;">61703.80</td>
-<td style="text-align: right;">0.7350722</td>
-<td style="text-align: right;">0.4873919</td>
+<td style="text-align: right;">478689.763</td>
+<td style="text-align: right;">239344.882</td>
+<td style="text-align: right;">3.3366131</td>
+<td style="text-align: right;">0.0443468</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">2686160.23</td>
-<td style="text-align: right;">83942.51</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">3299712.685</td>
+<td style="text-align: right;">71732.884</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:test_condition</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">45867.03</td>
-<td style="text-align: right;">22933.52</td>
-<td style="text-align: right;">0.1314855</td>
-<td style="text-align: right;">0.8772632</td>
+<td style="text-align: right;">144780.645</td>
+<td style="text-align: right;">72390.323</td>
+<td style="text-align: right;">0.5911001</td>
+<td style="text-align: right;">0.5578684</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">5581394.99</td>
-<td style="text-align: right;">174418.59</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">5633487.591</td>
+<td style="text-align: right;">122467.122</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_instruction:test_condition</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">304516.82</td>
-<td style="text-align: right;">304516.82</td>
-<td style="text-align: right;">2.1876809</td>
-<td style="text-align: right;">0.1585367</td>
+<td style="text-align: right;">34515.606</td>
+<td style="text-align: right;">34515.606</td>
+<td style="text-align: right;">0.2758887</td>
+<td style="text-align: right;">0.6044358</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">2227138.88</td>
-<td style="text-align: right;">139196.18</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2877461.273</td>
+<td style="text-align: right;">125107.012</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">encoding_stimulus_time:encoding_instruction:test_condition</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">105224.63</td>
-<td style="text-align: right;">52612.31</td>
-<td style="text-align: right;">0.5913009</td>
-<td style="text-align: right;">0.5595420</td>
+<td style="text-align: right;">8354.345</td>
+<td style="text-align: right;">4177.172</td>
+<td style="text-align: right;">0.0398563</td>
+<td style="text-align: right;">0.9609606</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">2847271.24</td>
-<td style="text-align: right;">88977.23</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">4821064.756</td>
+<td style="text-align: right;">104805.756</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
@@ -1468,18 +1469,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">500</td>
-<td style="text-align: right;">1805.934</td>
-<td style="text-align: right;">43.652</td>
+<td style="text-align: right;">1770.016</td>
+<td style="text-align: right;">37.079</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
-<td style="text-align: right;">1778.400</td>
-<td style="text-align: right;">50.593</td>
+<td style="text-align: right;">1732.204</td>
+<td style="text-align: right;">39.329</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
-<td style="text-align: right;">1816.666</td>
-<td style="text-align: right;">44.736</td>
+<td style="text-align: right;">1724.980</td>
+<td style="text-align: right;">34.979</td>
 </tr>
 </tbody>
 </table>
@@ -1497,13 +1498,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">1828.443</td>
-<td style="text-align: right;">38.057</td>
+<td style="text-align: right;">1745.990</td>
+<td style="text-align: right;">30.210</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">1772.368</td>
-<td style="text-align: right;">37.709</td>
+<td style="text-align: right;">1738.778</td>
+<td style="text-align: right;">30.491</td>
 </tr>
 </tbody>
 </table>
@@ -1521,13 +1522,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1921.894</td>
-<td style="text-align: right;">40.787</td>
+<td style="text-align: right;">1863.705</td>
+<td style="text-align: right;">32.250</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1678.954</td>
-<td style="text-align: right;">34.340</td>
+<td style="text-align: right;">1621.069</td>
+<td style="text-align: right;">27.958</td>
 </tr>
 </tbody>
 </table>
@@ -1547,38 +1548,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">1871.455</td>
-<td style="text-align: right;">64.744</td>
+<td style="text-align: right;">1829.174</td>
+<td style="text-align: right;">57.478</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">1740.414</td>
-<td style="text-align: right;">58.445</td>
+<td style="text-align: right;">1710.732</td>
+<td style="text-align: right;">46.737</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">1787.203</td>
-<td style="text-align: right;">72.352</td>
+<td style="text-align: right;">1722.599</td>
+<td style="text-align: right;">53.963</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">1769.701</td>
-<td style="text-align: right;">70.859</td>
+<td style="text-align: right;">1741.790</td>
+<td style="text-align: right;">57.274</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
-<td style="text-align: right;">1826.308</td>
-<td style="text-align: right;">60.361</td>
+<td style="text-align: right;">1686.322</td>
+<td style="text-align: right;">44.605</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">R</td>
-<td style="text-align: right;">1806.996</td>
-<td style="text-align: right;">66.146</td>
+<td style="text-align: right;">1763.800</td>
+<td style="text-align: right;">53.918</td>
 </tr>
 </tbody>
 </table>
@@ -1598,38 +1599,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1918.958</td>
-<td style="text-align: right;">64.110</td>
+<td style="text-align: right;">1862.007</td>
+<td style="text-align: right;">52.683</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1692.910</td>
-<td style="text-align: right;">58.709</td>
+<td style="text-align: right;">1677.831</td>
+<td style="text-align: right;">51.902</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1909.325</td>
-<td style="text-align: right;">80.657</td>
+<td style="text-align: right;">1859.860</td>
+<td style="text-align: right;">61.981</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1647.475</td>
-<td style="text-align: right;">60.378</td>
+<td style="text-align: right;">1605.350</td>
+<td style="text-align: right;">47.891</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1937.360</td>
-<td style="text-align: right;">66.291</td>
+<td style="text-align: right;">1869.228</td>
+<td style="text-align: right;">52.545</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1696.332</td>
-<td style="text-align: right;">59.484</td>
+<td style="text-align: right;">1580.124</td>
+<td style="text-align: right;">45.247</td>
 </tr>
 </tbody>
 </table>
@@ -1649,26 +1650,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1996.547</td>
-<td style="text-align: right;">62.874</td>
+<td style="text-align: right;">1871.436</td>
+<td style="text-align: right;">46.934</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1671.048</td>
-<td style="text-align: right;">43.255</td>
+<td style="text-align: right;">1627.542</td>
+<td style="text-align: right;">38.065</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1852.131</td>
-<td style="text-align: right;">52.539</td>
+<td style="text-align: right;">1856.395</td>
+<td style="text-align: right;">44.384</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1687.363</td>
-<td style="text-align: right;">53.944</td>
+<td style="text-align: right;">1614.203</td>
+<td style="text-align: right;">41.125</td>
 </tr>
 </tbody>
 </table>
@@ -1678,10 +1679,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <table class="table">
 <colgroup>
 <col style="width: 30%">
-<col style="width: 27%">
-<col style="width: 19%">
-<col style="width: 11%">
-<col style="width: 10%">
+<col style="width: 28%">
+<col style="width: 20%">
+<col style="width: 12%">
+<col style="width: 9%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1697,85 +1698,85 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">2071.863</td>
-<td style="text-align: right;">106.270</td>
+<td style="text-align: right;">1903.029</td>
+<td style="text-align: right;">79.750</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1681.533</td>
-<td style="text-align: right;">73.306</td>
+<td style="text-align: right;">1756.550</td>
+<td style="text-align: right;">82.634</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1774.055</td>
-<td style="text-align: right;">72.418</td>
+<td style="text-align: right;">1821.668</td>
+<td style="text-align: right;">69.117</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">500</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1704.916</td>
-<td style="text-align: right;">92.830</td>
+<td style="text-align: right;">1597.436</td>
+<td style="text-align: right;">62.064</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1940.675</td>
-<td style="text-align: right;">125.193</td>
+<td style="text-align: right;">1870.850</td>
+<td style="text-align: right;">92.814</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1637.385</td>
-<td style="text-align: right;">72.791</td>
+<td style="text-align: right;">1586.303</td>
+<td style="text-align: right;">57.558</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1879.082</td>
-<td style="text-align: right;">102.911</td>
+<td style="text-align: right;">1849.715</td>
+<td style="text-align: right;">83.044</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1657.686</td>
-<td style="text-align: right;">96.823</td>
+<td style="text-align: right;">1625.888</td>
+<td style="text-align: right;">77.922</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1976.841</td>
-<td style="text-align: right;">91.850</td>
+<td style="text-align: right;">1839.599</td>
+<td style="text-align: right;">70.310</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1692.689</td>
-<td style="text-align: right;">78.484</td>
+<td style="text-align: right;">1543.595</td>
+<td style="text-align: right;">54.569</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">exemplar</td>
-<td style="text-align: right;">1902.117</td>
-<td style="text-align: right;">95.137</td>
+<td style="text-align: right;">1896.818</td>
+<td style="text-align: right;">77.623</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2000</td>
 <td style="text-align: left;">R</td>
 <td style="text-align: left;">novel</td>
-<td style="text-align: right;">1700.436</td>
-<td style="text-align: right;">90.730</td>
+<td style="text-align: right;">1619.698</td>
+<td style="text-align: right;">73.463</td>
 </tr>
 </tbody>
 </table>
@@ -1857,7 +1858,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="write-up-1" class="level2">
 <h2 class="anchored" data-anchor-id="write-up-1">Write-up</h2>
 <p>Mean reaction times on correct trials for each subject in each condition were submitted to a 3 (Encoding Duration: 500ms, 1000ms, 2000ms) x 2 (Encoding Instruction: Forget vs.&nbsp;Remember) x 2 (Lure type: Novel vs.&nbsp;Exemplar) fully repeated measures ANOVA. For brevity we report only the significant effects. The full analysis is contained in supplementary materials.</p>
-<p>The main effect of lure type was significant, <span class="math inline">\(F(1, 16) = 26.28\)</span>, <span class="math inline">\(\mathit{MSE} = 114,329.02\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .042\)</span>. Mean reaction times were faster in the novel lure condition (M = 1678.954, SEM = 34.34) than exemplar lure condition (M = 1921.894, SEM = 40.787).</p>
+<p>The main effect of lure type was significant, <span class="math inline">\(F(1, 23) = 44.07\)</span>, <span class="math inline">\(\mathit{MSE} = 97,688.40\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_G = .037\)</span>. Mean reaction times were faster in the novel lure condition (M = 1621.069, SEM = 27.958) than exemplar lure condition (M = 1863.705, SEM = 32.25).</p>
 <p>The remaining main effects and interactions were not significant.</p>
 </section>
 <section id="save-environment" class="level2">

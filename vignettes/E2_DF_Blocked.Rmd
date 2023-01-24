@@ -652,6 +652,100 @@ The main effect of lure type was significant, `r RT$apa_print$full_result$test_c
 
 The remaining main effects and interactions were not significant.
 
+## Instruction Switching Analysis
+
+```{r, eval = FALSE}
+
+# create list to hold results
+Switching <- list()
+
+# Pre-process data for analysis
+# assign to "filtered_data" object
+
+# get all included participants
+Switching$filtered_data <- all_data %>%
+  filter(ID %in% all_excluded == FALSE)
+
+# study data for each participant
+# create n-1 instruction factor
+# create switching factor
+# Remove first encoding trial (no switch or repeat)
+
+Switching$study_data <- Switching$filtered_data %>%
+  filter(experiment_phase == "study", 
+         item_type == "study") %>%
+  mutate(encoding_instruction_n_1 = c(NA,encoding_instruction[-length(encoding_instruction)])) %>%
+  mutate(instruction_switch = case_when(encoding_instruction == encoding_instruction_n_1 ~ "Repeat",
+                                        encoding_instruction != encoding_instruction_n_1 ~ "Switch")) %>%
+  filter(trial_index != 7)
+
+#View(Switching$study_data)
+#dim(Switching$study_data)
+#length(unique(Switching$study_data$ID))
+
+# Add switching factor to test data for each trial and participant.
+
+Switching$test_data <- Switching$filtered_data %>%
+  filter(experiment_phase == "test") 
+
+selected_study <- Switching$study_data %>%
+  select(ID,image_name,encoding_instruction_n_1,instruction_switch) %>%
+  rename("study_item_image_name" = "image_name")
+
+Switching$test_data <- left_join(Switching$test_data, selected_study,by=c("ID","study_item_image_name"))%>%
+  filter(is.na(instruction_switch) == FALSE)
+
+#View(Switching$test_data)
+
+```
+
+```{r}
+
+# declare factors, IVS, subject variable, and DV
+
+Switching$factors$IVs <- c("encoding_instruction",
+                          "instruction_switch",
+                          "test_condition")
+Switching$factors$subject <- "ID"
+Switching$factors$DV <- "correct"
+
+## Subject-level means used for ANOVA
+# get individual subject means for each condition
+Switching$subject_means <- get_mean_sem(
+  data = Switching$test_data,
+  grouping_vars = c(Switching$factors$subject,
+                    Switching$factors$IVs),
+  dv = Switching$factors$DV
+)
+
+## Condition-level means
+# get all possible main effects and interactions
+Switching$effects <- get_effect_names(Switching$factors$IVs)
+
+Switching$means <- lapply(Switching$effects, FUN = function(x) {
+  get_mean_sem(data=Switching$test_data,
+             grouping_vars = x,
+             dv = Switching$factors$DV)
+})
+
+Switching$means
+
+## ANOVA
+
+# ensure factors are factor class
+Switching$subject_means <- Switching$subject_means %>%
+  mutate_at(Switching$factors$IVs,factor) %>%
+  mutate_at(Switching$factors$subject,factor)
+
+# run ANOVA
+Switching$aov.out <- aov(mean_correct ~ encoding_instruction*instruction_switch*test_condition + Error(ID/(encoding_instruction*instruction_switch*test_condition)), Switching$subject_means)
+
+# save printable summaries
+Switching$apa_print <- papaja::apa_print(Switching$aov.out)
+Switching$apa_print
+
+```
+
 ## save environment
 
 ```{r}

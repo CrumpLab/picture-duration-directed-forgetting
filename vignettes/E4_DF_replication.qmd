@@ -200,7 +200,19 @@ np_data <- all_data[all_data$ID %in% no_press_ids, ]
 
 ```
 
+```{r}
+bp_data %>%
+  filter(experiment_phase == "test") %>%
+  group_by(encoding_instruction, correct) %>%
+  summarize(count = n())
+```
 
+```{r}
+np_data %>%
+  filter(experiment_phase == "test") %>%
+  group_by(encoding_instruction, correct) %>%
+  summarize(count = n())
+```
 
 
 

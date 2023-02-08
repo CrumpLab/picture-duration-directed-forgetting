@@ -204,14 +204,16 @@ np_data <- all_data[all_data$ID %in% no_press_ids, ]
 bp_data %>%
   filter(experiment_phase == "test") %>%
   group_by(encoding_instruction, correct) %>%
-  summarize(count = n())
+  summarize(count = n()) %>%
+  mutate(percent = count / sum(count))
 ```
 
 ```{r}
 np_data %>%
   filter(experiment_phase == "test") %>%
   group_by(encoding_instruction, correct) %>%
-  summarize(count = n())
+  summarize(count = n()) %>%
+  mutate(percent = count / sum(count))
 ```
 
 

@@ -1,0 +1,208 @@
+---
+title: "E4_DF_replication"
+editor: source
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{E4_DF_replication}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+```{r}
+install.packages("pacman")
+install.packages("dplyr")
+install.packages("tidyverse")
+install.packages("jsonlite")
+install.packages("xtable")
+install.packages("data.table")
+install.packages("stringr")
+```
+
+```{r}
+library(pacman)
+library(dplyr)
+library(tidyverse)
+library(jsonlite)
+library(xtable)
+library(data.table)
+library(stringr)
+library(tidyr)
+```
+
+```{r}
+# Read the text file from JATOS ...
+
+read_file('data/E4/jatos_results_20230207212802.txt') %>%
+  
+  # ... split it into lines ...
+  
+  str_split('\n') %>% first() %>%
+  
+  # ... filter empty rows ...
+  
+  discard(function(x) x == '') %>%
+  
+  # ... parse JSON into a data.frame
+  
+  map_dfr(fromJSON, flatten=T) -> all_data
+
+```
+
+# Demographics
+
+```{r}
+demographics <- all_data %>%
+  filter(trial_type == "survey-html-form") %>%
+  select(ID,response) %>%
+  unnest_wider(response) %>%
+  mutate(age = as.numeric(age))
+
+age_demographics <- demographics %>%
+  summarize(mean_age = mean(age),
+            sd_age = sd(age),
+            min_age = min(age),
+            max_age = max(age))
+
+factor_demographics <- apply(demographics[-1], 2, table)
+
+```
+
+# Pre-processing
+
+```{r}
+# Checking to see if 25% of responses during test
+
+test_null <- all_data %>%
+  filter(experiment_phase == "test",
+         response =="NULL") %>%
+  group_by(ID) %>%
+  count()
+
+test_null_excluded <- test_null %>%
+  filter(n > (120*.25)) %>%
+  pull(ID)
+
+ggplot(test_null, aes(x=n))+
+  geom_vline(xintercept=30)+
+  geom_histogram()+
+  ggtitle("Histogram of count of null responses \n for each subject during test")
+```
+
+```{r}
+# Checking to see if there was 75% or greater response bias during test.
+
+test_response_bias <- all_data %>%
+  filter(experiment_phase == "test",
+         response !="NULL") %>%
+  mutate(response = as.numeric(response)) %>%
+  group_by(ID, response) %>%
+  count() %>%
+  pivot_wider(names_from = response,
+              values_from = n,
+              values_fill = 0) %>%
+  mutate(bias = abs(`0` - `1`)/120)
+
+test_response_bias_excluded <- test_response_bias %>%
+  filter(bias > .75) %>%
+  pull(ID)
+
+ggplot(test_response_bias, aes(x=bias))+
+  geom_vline(xintercept=.75)+
+  geom_histogram()+
+  ggtitle("Histogram of response bias \n for each subject during test phase")
+```
+
+```{r}
+# Checking to see if mean response time per subject was less than 300ms.
+
+test_mean_rt <- all_data %>%
+  filter(experiment_phase == "test",
+         response !="NULL",
+         rt != "NULL") %>%
+  mutate(rt = as.numeric(rt)) %>%
+  group_by(ID) %>%
+  summarize(mean_RT = mean(rt))
+
+test_mean_rt_excluded <- test_mean_rt %>%
+  filter(mean_RT < 300) %>%
+  pull(ID)
+
+ggplot(test_mean_rt, aes(x=mean_RT))+
+  geom_vline(xintercept=300)+
+  geom_histogram()+
+  ggtitle("Histogram of response bias \n for each subject during test phase")
+```
+
+```{r}
+# Checking to see if accuracy on novel lures was greater than 55%.
+
+test_mean_novel_accuracy <- all_data %>%
+  filter(experiment_phase == "test",
+         test_condition == "novel") %>%
+  mutate(correct = as.logical(correct)) %>%
+  group_by(ID) %>%
+  summarize(mean_correct = mean(correct))
+
+test_mean_novel_accuracy_excluded <- test_mean_novel_accuracy %>%
+  filter(mean_correct < .55) %>%
+  pull(ID)
+
+ggplot(test_mean_novel_accuracy, aes(x=mean_correct))+
+  geom_vline(xintercept=.55)+
+  geom_histogram()+
+  ggtitle("Histogram of mean accuracy for novel lures \n for each subject during test phase")
+```
+
+```{r}
+all_excluded <- unique(c(test_null_excluded,
+                  test_response_bias_excluded,
+                  test_mean_rt_excluded,
+                  test_mean_novel_accuracy_excluded))
+
+length(all_excluded)
+```
+
+# Analysis
+
+```{r}
+# Collect IDs for the two groups — button pressing vs. no button pressing.
+
+button_press_ids <- c()
+no_press_ids <- c()
+
+button_press_ids <- all_data %>%
+  filter(grepl("press the R button", stimulus)) %>%
+  select(ID)
+
+button_press_ids <- button_press_ids[["ID"]]
+
+no_press_ids <- all_data %>%
+  filter(!grepl("press the R button", stimulus)) %>%
+  filter(grepl("Part I Instructions", stimulus)) %>%
+  select(ID)
+
+no_press_ids <- no_press_ids[["ID"]]
+  
+```
+
+```{r}
+# Delineate dataset between the two groups.
+
+bp_data <- all_data[all_data$ID %in% button_press_ids, ]
+
+np_data <- all_data[all_data$ID %in% no_press_ids, ]
+
+```
+
+
+
+
+
+
+

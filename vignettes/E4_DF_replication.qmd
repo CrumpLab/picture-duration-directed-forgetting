@@ -38,7 +38,7 @@ library(tidyr)
 ```{r}
 # Read the text file from JATOS ...
 
-read_file('data/E4/jatos_results_20230207212802.txt') %>%
+read_file('data/E4/jatos_results_20230209133348.txt') %>%
   
   # ... split it into lines ...
   
@@ -201,19 +201,41 @@ np_data <- all_data[all_data$ID %in% no_press_ids, ]
 ```
 
 ```{r}
+# This is the table to be used for ANOVA.
+
+subject_bp_data <- bp_data %>%
+  filter(experiment_phase == "test") %>%
+  group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
+  summarize(count = n()) %>%
+  mutate(percent = count / sum(count)) %>%
+  filter(correct == TRUE)
+
 bp_data %>%
   filter(experiment_phase == "test") %>%
-  group_by(encoding_instruction, correct) %>%
+  group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
   summarize(count = n()) %>%
-  mutate(percent = count / sum(count))
+  mutate(percent = count / sum(count)) %>%
+  filter(correct == TRUE) %>%
+  group_by(test_item_item_type, encoding_instruction) %>%
+  summarize(mean_pct = mean(percent))
 ```
 
 ```{r}
+student_np_data <- np_data %>%
+  filter(experiment_phase == "test") %>%
+  group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
+  summarize(count = n()) %>%
+  mutate(percent = count / sum(count))%>%
+  filter(correct == TRUE)
+
 np_data %>%
   filter(experiment_phase == "test") %>%
-  group_by(encoding_instruction, correct) %>%
+  group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
   summarize(count = n()) %>%
-  mutate(percent = count / sum(count))
+  mutate(percent = count / sum(count))%>%
+  filter(correct == TRUE) %>%
+  group_by(test_item_item_type, encoding_instruction) %>%
+  summarize(mean_pct = mean(percent))
 ```
 
 

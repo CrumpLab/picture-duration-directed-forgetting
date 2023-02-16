@@ -208,7 +208,10 @@ subject_bp_data <- bp_data %>%
   group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
   summarize(count = n()) %>%
   mutate(percent = count / sum(count)) %>%
-  filter(correct == TRUE)
+  filter(correct == TRUE) %>%
+  mutate(treatment = "button")
+
+# Table to view results quickly.
 
 bp_data %>%
   filter(experiment_phase == "test") %>%
@@ -221,12 +224,17 @@ bp_data %>%
 ```
 
 ```{r}
-student_np_data <- np_data %>%
+# Table for ANOVA.
+
+subject_np_data <- np_data %>%
   filter(experiment_phase == "test") %>%
   group_by(ID, test_item_item_type, encoding_instruction, correct) %>%
   summarize(count = n()) %>%
   mutate(percent = count / sum(count))%>%
-  filter(correct == TRUE)
+  filter(correct == TRUE) %>%
+  mutate(treatment = "no_button")
+
+# Table to view results quickly.
 
 np_data %>%
   filter(experiment_phase == "test") %>%
@@ -238,7 +246,38 @@ np_data %>%
   summarize(mean_pct = mean(percent))
 ```
 
+```{r}
+# Combine the two `student_` datasets into one.
 
+student_list <- list(subject_bp_data, subject_np_data)
 
+student_all <- rbindlist(student_list)
 
+student_all
+```
+
+```{r}
+# Convert IVs to factors.
+
+student_all$ID <- as.factor(student_all$ID)
+student_all$test_item_item_type <- as.factor(student_all$test_item_item_type)
+student_all$encoding_instruction <- as.factor(student_all$encoding_instruction)
+student_all$treatment <- as.factor(student_all$treatment)
+```
+
+```{r}
+student_all
+```
+
+```{r}
+# Run ANOVA.
+
+anova <- aov(percent ~ test_item_item_type * encoding_instruction * treatment, student_all)
+```
+
+```{r}
+# Summary for ANOVA.
+
+summary(anova)
+```
 

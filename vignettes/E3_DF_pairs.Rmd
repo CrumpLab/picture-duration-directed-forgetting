@@ -31,7 +31,7 @@ library(data.table)
 ```{r}
 # Read the text file from JATOS ...
 #read_file('data/E3/jatos_results_20221103143242.txt') %>%
-read_file('data/E3/jatos_results_20221220155536.txt') %>%
+  read_file('data/E3/jatos_results_20230124183452.txt') %>%
   # ... split it into lines ...
   str_split('\n') %>% first() %>%
   # ... filter empty rows ...
@@ -288,6 +288,9 @@ Accuracy$filtered_data <- all_data %>%
   filter(experiment_phase == "test", 
          ID %in% all_excluded == FALSE)
 
+#Accuracy$filtered_data <- all_data %>%
+#  filter(experiment_phase == "test")
+
 # declare factors, IVS, subject variable, and DV
 Accuracy$factors$IVs <- c("encoding_stimulus_time",
                           "encoding_instruction",
@@ -346,7 +349,7 @@ Accuracy$graphs$figure <- ggplot(Accuracy$means$`encoding_stimulus_time:encoding
   ylab("Proportion Correct")+
   xlab("Lure Type")+
   scale_fill_discrete(name = " Encoding \n Instruction") +
-  ggtitle("E2: Proportion Correct by Stimulus Encoding Duration, \n Encoding Instruction, and Lure Type")
+  ggtitle("E3: Proportion Correct by Stimulus Encoding Duration, \n Encoding Instruction, and Lure Type")
 
 Accuracy$graphs$figure
 ```
@@ -674,6 +677,104 @@ save.image("data/E3/E3_data_write_up.RData")
 
 
 
+## Subjective encoding instruction rating
+
+```{r, eval = FALSE}
+
+# create list to hold results
+Rating <- list()
+
+# Pre-process data for analysis
+# assign to "filtered_data" object
+
+# get all included participants
+Rating$filtered_data <- all_data
+
+# study data for each participant
+# fill slider rating for each item
+
+Rating$study_data <- Rating$filtered_data %>%
+  filter(experiment_phase == "study", 
+         item_type == "study",
+         trial_type == "html-slider-response")
+
+dim(Rating$study_data)
+missing_rating_id <- seq(from = 1,to = dim(Rating$study_data)[1], by = 2)
+known_rating_id <- seq(from = 0,to = dim(Rating$study_data)[1], by = 2)
+Rating$study_data$response[missing_rating_id] <- Rating$study_data$response[known_rating_id]
+
+
+#View(Rating$study_data)
+#dim(Rating$study_data)
+#length(unique(Rating$study_data$ID))
+
+# Add Rating factor to test data for each trial and participant.
+
+Rating$test_data <- Rating$filtered_data %>%
+  filter(experiment_phase == "test") %>%
+  select(!serial_position)
+
+selected_study <- Rating$study_data %>%
+  select(ID,image_name,response,trial_index,serial_position,) %>%
+  rename("rating" = "response",
+         "encoding_trial_num" = "trial_index",
+         "study_item_image_name" = "image_name")
+
+Rating$test_data <- left_join(Rating$test_data, selected_study,by=c("ID","study_item_image_name"))
+
+#View(Rating$test_data)
+
+```
+
+```{r}
+Rating$test_data <- Rating$test_data %>%
+  mutate(correct = as.numeric(correct),
+         rating = as.numeric(rating))
+
+#serial position within pair
+ggplot(Rating$test_data, aes(x=rating,y=correct, 
+                             group = serial_position, 
+                             color = serial_position))+
+  geom_point() +
+  geom_smooth()
+
+# novel vs exemplar test
+ggplot(Rating$test_data, aes(x=rating,y=correct, 
+                             group = test_condition, 
+                             color = test_condition))+
+  geom_point() +
+  geom_smooth()
+
+```
+
+```{r, error=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(Rating$test_data, aes(x=rating,y=correct, 
+                             group = test_condition, 
+                             color = test_condition))+
+  coord_cartesian(ylim = c(0,1))+
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  facet_wrap(~ID)
+
+ggplot(Rating$test_data, aes(x=rating))+
+  geom_histogram() +
+  facet_wrap(~ID)
+```
+
+```{r}
+#whole list serial position on X axis, not rating related
+ggplot(Rating$test_data, aes(x=encoding_trial_num,y=correct, 
+                             group = test_condition, 
+                             color = test_condition))+
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~ID)
+```
+
+```{r}
+hist(Rating$test_data$rating)
+```
 
 
 

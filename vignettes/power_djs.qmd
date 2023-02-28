@@ -1,0 +1,192 @@
+---
+title: "power_djs"
+editor: visual
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{E4_DF_replication}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+nov_r = rbinom(30, 1, 0.88)
+nov_f = rbinom(30, 1, 0.88)
+ex_r = rbinom(30, 1, 0.78)
+ex_f = rbinom(30, 1, 0.71)
+
+data <- tibble(correct = c(nov_r, nov_f, ex_r, ex_f),
+               test_item_type = rep(c("nov", "ex"), each = 60),
+               cue_type = rep(c("r", "f"), times = 2, each = 30))
+
+data$test_item_type <- as.factor(data$test_item_type)
+data$cue_type <- as.factor(data$cue_type)
+
+data
+
+data %>%
+  group_by(test_item_type, cue_type) %>%
+  summarize(count = sum(correct)) %>%
+  mutate(mean_correct = count / 30) %>%
+  ggplot(aes(x = test_item_type, y = mean_correct)) +
+  geom_col(aes(fill = cue_type), stat = "identity", position = "dodge")
+```
+
+```{r}
+sim_subject <- function() {
+  nov_r = rbinom(30, 1, 0.88)
+  nov_f = rbinom(30, 1, 0.88)
+  ex_r = rbinom(30, 1, 0.78)
+  ex_f = rbinom(30, 1, 0.71)
+  
+  data <- tibble(correct = c(nov_r, nov_f, ex_r, ex_f),
+                 test_item_type = rep(c("nov", "ex"), each = 60),
+                 cue_type = rep(c("r", "f"), times = 2, each = 30))
+  
+  data$test_item_type <- as.factor(data$test_item_type)
+  data$cue_type <- as.factor(data$cue_type)
+  return(data)
+}
+
+```
+
+```{r}
+means <- function(d) {
+  
+  m <- d %>%
+    filter(test_item_type == "ex") %>%
+    group_by(cue_type) %>%
+    summarize(count = sum(correct)) %>%
+    mutate(mean_correct = count / 30)
+  
+  return(m)
+}
+```
+
+```{r}
+means(sim_subject())
+```
+
+```{r}
+subjects <- function(num_subjects) {
+  s <- tibble()
+  
+  for(i in 1:num_subjects) {
+    s <- rbind(s, means(sim_subject()))
+  }
+  
+  return(s)
+}
+```
+
+```{r}
+subjects(10)
+```
+
+```{r}
+test <- function(subjects) {
+  x <- subjects %>%
+    select(cue_type) %>%
+    unlist()
+  
+  y <- subjects %>%
+    select(mean_correct) %>%
+    unlist()
+  
+  t <- t.test(y ~ x, var.equal = TRUE)
+  
+  return(t$p.value)
+  
+}
+```
+
+```{r}
+p_values <- function(num_subjects, num_sims, significance) {
+  p <- c()
+
+  for(i in 1:num_sims) {
+    p <- append(p, test(subjects(num_subjects)))
+  }
+  
+  dfp <- tibble(p_val = p, 
+                simulation = 1:length(p))
+  
+  dfp <- dfp %>%
+    mutate(significant =
+             case_when(
+               p_val < significance ~ 1,
+               TRUE ~ 0
+             )
+           )
+    
+  return(dfp)
+  
+}
+
+```
+
+```{r}
+p_values(10, 100, 0.025)
+```
+
+```{r}
+power <- function(p_values) {
+  x <- c()
+  
+  x <- append(x, 
+              p_values %>%
+                select(significant) %>%
+                unnest(cols = c()) %>%
+                unlist())
+  
+  x <- sum(x) / length(x)
+  
+  return(x)
+}
+```
+
+```{r}
+power(p_values(10, 100, 0.025))
+```
+
+```{r}
+num_subjects = seq(10, 100, 5)
+
+powers <- c()
+
+for(i in num_subjects) {
+  powers <- append(powers, power(p_values(i, 100, 0.025)))
+}
+```
+
+```{r}
+powers
+```
+
+```{r}
+plot_df <- function(num_subjects, powers) {
+  df <- tibble(num_subjects, powers)
+  return(df)
+}
+```
+
+```{r}
+power_df <- plot_df(num_subjects, powers)
+
+power_df
+
+ggplot(power_df, aes(x = num_subjects, y = powers)) +
+  geom_point() +
+  geom_line()
+```
+
+

@@ -38,7 +38,7 @@ library(tidyr)
 ```{r}
 # Read the text file from JATOS ...
 
-read_file('data/E4/jatos_results_20230209133348.txt') %>%
+read_file('data/E4/jatos_results_20230223202648.txt') %>%
   
   # ... split it into lines ...
   
@@ -272,7 +272,7 @@ student_all
 ```{r}
 # Run ANOVA.
 
-anova <- aov(percent ~ test_item_item_type * encoding_instruction * treatment, student_all)
+anova <- aov(percent ~ test_item_item_type * encoding_instruction * treatment + Error(ID/(test_item_item_type * encoding_instruction)), student_all)
 ```
 
 ```{r}
@@ -280,4 +280,100 @@ anova <- aov(percent ~ test_item_item_type * encoding_instruction * treatment, s
 
 summary(anova)
 ```
+
+```{r}
+ggplot(data = subject_bp_data) +
+  geom_bar(aes(x = encoding_instruction, y = percent), stat = "summary", fun = "mean") +
+  coord_cartesian(ylim = c(0.5, 1.0)) +
+  facet_wrap(~ ID)
+```
+
+```{r}
+ggplot(data = subject_np_data) +
+  geom_bar(aes(x = encoding_instruction, y = percent), stat = "summary", fun = "mean") +
+  coord_cartesian(ylim = c(0.5, 1.0)) +
+  facet_wrap(~ ID)
+```
+
+```{r}
+all_data %>%
+  filter(grepl("html-slider-response", trial_type)) %>%
+  select("response") %>%
+  unlist()
+```
+
+```{r}
+all_data %>%
+  filter(grepl("html-slider-response", trial_type)) %>%
+  select("stimulus")
+```
+
+```{r}
+midtask_questions <- all_data %>%
+  filter(trial_type == "html-slider-response") %>%
+  select(ID, response, stimulus) %>%
+  unnest(response)
+
+
+q <- midtask_questions %>%
+  select(stimulus) %>%
+  str_match_all("<p>\\s*(.*?)\\s*</p>")
+
+midtask_questions$question <- q[[1]][,2]
+
+midtask_questions$qnum <- rep(c(1, 2, 3, 4), nrow(midtask_questions)/4)
+
+midtask_questions <- midtask_questions %>%
+  select(!stimulus)
+
+midtask_questions
+
+```
+
+```{r}
+midtask_questions %>%
+  filter(qnum == 1) %>%
+  ggplot() +
+  geom_col(aes(x = ID, y = response))
+```
+
+```{r}
+follow_IDs <- midtask_questions %>%
+  filter(qnum == 3) %>%
+  filter(response >= 70) %>%
+  select(ID)
+
+follow_IDs <- follow_IDs[["ID"]]
+```
+
+```{r}
+midtask_questions %>%
+  filter(ID %in% follow_IDs) %>%
+  filter(qnum == 2) %>%
+  ggplot() +
+  geom_col(aes(x = ID, y = response))
+```
+
+```{r}
+student_all %>%
+  filter(ID %in% follow_IDs) %>%
+  filter(test_item_item_type == "exemplar") %>%
+  group_by(encoding_instruction, treatment) %>%
+  summarize(mean = mean(percent))
+```
+
+```{r}
+implementers <- student_all %>%
+  filter(ID %in% follow_IDs)
+
+implementers_anova <- aov(percent ~ test_item_item_type * encoding_instruction * treatment + Error(ID/(test_item_item_type * encoding_instruction)), implementers)
+
+summary(implementers_anova)
+```
+
+
+
+
+
+
 

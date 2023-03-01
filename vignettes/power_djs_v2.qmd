@@ -70,8 +70,7 @@ means <- function(d) {
   
   m <- d %>%
     group_by(test_item_type, cue_type) %>%
-    summarize(count = sum(correct)) %>%
-    mutate(mean_correct = count / 30)
+    summarize(mean_correct = mean(correct))
   
   return(m)
 }

@@ -41,7 +41,11 @@ data %>%
   geom_col(aes(fill = cue_type), stat = "identity", position = "dodge")
 ```
 
+# Power analysis for exemplar DF effect
+
 ```{r}
+# Function for simulating a single subject's data.
+
 sim_subject <- function() {
   nov_r = rbinom(30, 1, 0.88)
   nov_f = rbinom(30, 1, 0.88)
@@ -60,6 +64,8 @@ sim_subject <- function() {
 ```
 
 ```{r}
+# Function for calculating the means for exemplar r/f cues.
+
 means <- function(d) {
   
   m <- d %>%
@@ -77,6 +83,10 @@ means(sim_subject())
 ```
 
 ```{r}
+# Function for simulating multiple subjects' data and calculating the means for exemplar trials.
+
+# Add subject index.
+
 subjects <- function(num_subjects) {
   s <- tibble()
   
@@ -93,6 +103,10 @@ subjects(10)
 ```
 
 ```{r}
+# Function to attain the p-value for a t-test.
+
+# ANOVA for full design; pull p-value from there.
+
 test <- function(subjects) {
   x <- subjects %>%
     select(cue_type) %>%
@@ -102,7 +116,7 @@ test <- function(subjects) {
     select(mean_correct) %>%
     unlist()
   
-  t <- t.test(y ~ x, var.equal = TRUE)
+  t <- t.test(y ~ x, var.equal = TRUE, paired = TRUE)
   
   return(t$p.value)
   
@@ -110,6 +124,8 @@ test <- function(subjects) {
 ```
 
 ```{r}
+# Function to generate p-values for subjects and simulations. Determines if the simulation was powered or not as well.
+
 p_values <- function(num_subjects, num_sims, significance) {
   p <- c()
 
@@ -139,6 +155,8 @@ p_values(10, 100, 0.025)
 ```
 
 ```{r}
+# Function to determine the power for a given number of subjects and simulations.
+
 power <- function(p_values) {
   x <- c()
   
@@ -159,6 +177,8 @@ power(p_values(10, 100, 0.025))
 ```
 
 ```{r}
+# Calculating the power for sample sizes 10 through 100 at steps of 5 with 100 simulations.
+
 num_subjects = seq(10, 100, 5)
 
 powers <- c()
@@ -173,6 +193,8 @@ powers
 ```
 
 ```{r}
+# Function to create a dataframe that can be used to plot the power curve.
+
 plot_df <- function(num_subjects, powers) {
   df <- tibble(num_subjects, powers)
   return(df)
@@ -188,5 +210,27 @@ ggplot(power_df, aes(x = num_subjects, y = powers)) +
   geom_point() +
   geom_line()
 ```
+
+```{r}
+num_subjects = seq(10, 100, 5)
+
+powers <- c()
+
+for(i in num_subjects) {
+  powers <- append(powers, power(p_values(i, 10000, 0.025)))
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -332,7 +332,7 @@ midtask_questions
 
 ```{r}
 midtask_questions %>%
-  filter(qnum == 1) %>%
+  filter(qnum == 3) %>%
   ggplot() +
   geom_col(aes(x = ID, y = response))
 ```

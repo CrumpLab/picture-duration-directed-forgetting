@@ -371,6 +371,62 @@ implementers_anova <- aov(percent ~ test_item_item_type * encoding_instruction *
 summary(implementers_anova)
 ```
 
+```{r}
+midtask_df <- midtask_questions %>%
+  select(-question) %>%
+  pivot_wider(names_from = qnum, values_from = response) 
+```
+
+```{r}
+midtask_df <- midtask_df %>%
+  rename(q1 = "1") %>%
+  rename(q2 = "2") %>%
+  rename(q3 = "3") %>%
+  rename(q4 = "4")
+```
+
+```{r}
+student_all
+```
+
+```{r}
+student_all_questions <- merge(x = student_all, y = midtask_df, by = "ID")
+```
+
+```{r}
+student_all_questions
+```
+
+```{r}
+ggplot(student_all_questions, aes(x = q1, y = percent, color = treatment)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+ggplot(student_all_questions, aes(x = q2, y = percent, color = treatment)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+ggplot(student_all_questions, aes(x = q3, y = percent, color = treatment)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+ggplot(student_all_questions, aes(x = q4, y = percent, color = treatment)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+
+
+
+
+
 
 
 

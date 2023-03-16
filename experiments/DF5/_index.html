@@ -31,12 +31,16 @@ Generate study and test timeline variables */
 var num_pictures = 30;
 var num_words = 30;
 
-/* Create randomized variables for words and pictures */
+/* Create randomized variables for words and pictures. */
 
 var all_images = object_images;
 var all_words = object_words;
 
+// Sampling words to use to sample image pairs (e.g., airplane1 and airplane2).
+
 var words_for_sample_images = jsPsych.randomization.sampleWithoutReplacement(all_words, num_pictures);
+
+// Sampling images using a regular expression to only pull exact matches (i.e., all_images[i].word == words_for_sample_images[i]).
 
 var sample_images = [];
 
@@ -54,7 +58,11 @@ for(const i in all_images) {
 
 }
 
+// Sampling words.
+
 var sample_words = jsPsych.randomization.sampleWithoutReplacement(all_words, num_words);
+
+// Randomly assigning "test" or "study" to each image in each pair.
 
 var sample_images_split = [];
 
@@ -69,6 +77,8 @@ for(const i in sample_images_split) {
   sample_images_split[i][1].experiment_phase = experiment_phase[1]
 }
 
+// Shuffling the image and word orders.
+
 sample_images_split = jsPsych.randomization.shuffle(sample_images_split)
 sample_images = sample_images_split.flat()
 
@@ -81,6 +91,8 @@ var stimulus_presentation_time = 2000;
 /* Create study images timeline variable */
 
 var study_images_timeline = [];
+
+// Creating a variable array of only the study images and adding an encoding instruction to each.
 
 for(const i in sample_images) {
   
@@ -107,6 +119,8 @@ for(const i in study_images_timeline) {
 
 var test_image_recognition_timeline = []
 
+// Adding in a variable to track correct and incorrect responses.
+
 for(const i in sample_images_split) {
   
   let correct_position = ""
@@ -118,6 +132,8 @@ for(const i in sample_images_split) {
   } else {
     correct_position = "1"
   }
+
+// Create the timeline variable.
 
   test_image_recognition_timeline.push({
     stimulus: "<div> <img src ='" + sample_images_split[i][0].file_path + " '> <img src = '" + sample_images_split[i][1].file_path + "'> </div>"
@@ -169,13 +185,13 @@ var study_words_timeline = [];
 
 for(const i in sample_words) {
   
-
   study_words_timeline.push({
     stimulus: '<div style="font-size:60px;">' + sample_words[i] + '</div>',
     data: {word: sample_words[i]}
-  })
+  });
+};
 
-}
+// Adding in encoding instructions for each word.
 
 for(const i in study_words_timeline) {
 
@@ -191,6 +207,8 @@ for(const i in study_words_timeline) {
 /* Create study images and words timeline variable */
 
 var study_images_words_timeline = [];
+
+// Creating a loop and sampling [0, 1] to randomly assign whether the stimulus will be an image or a word.
 
 for(const i in sample_images) {
 
@@ -212,6 +230,8 @@ for(const i in sample_images) {
   }
 }
 
+// Adding in encoding instructions for each image/word.
+
 for(const i in study_images_words_timeline) {
 
   if(i % 2 == 0) {
@@ -230,13 +250,9 @@ for(const i in sample_images){
   image_list.push(sample_images[i].file_path);
 }
 
-/*
-A helpful website with tricks for js
-http://learnjsdata.com/
-*/
-
 </script>
 <script type="text/javascript">
+
 /* Run Experiment
 Define jsPsych plugins
 Initialize and run
@@ -249,6 +265,8 @@ jsPsych.data.addProperties({ID: rand_subject_id});
 
 /* experiment parameters */
 
+/* Creating a means of running less trials. */
+
 var runshort = true;
 if(runshort == true){
   study_images_timeline = study_images_timeline.slice(0, 5);
@@ -256,6 +274,8 @@ if(runshort == true){
   study_words_timeline = study_words_timeline.slice(0, 5);
   study_images_words_timeline = study_images_words_timeline.slice(0, 5);
 }
+
+/* Shuffling all timeline variables to ensure randomization. */
 
 study_images_timeline = jsPsych.randomization.shuffle(study_images_timeline)
 test_image_recognition_timeline = jsPsych.randomization.shuffle(test_image_recognition_timeline)
@@ -340,6 +360,10 @@ var demographics = {
   }
 };
 
+/* Instructions for each encoding and test phase */
+
+// Image encoding instructions.
+
 var study_instructions_images = {
   type: "html-keyboard-response",
   stimulus: `
@@ -355,6 +379,8 @@ var study_instructions_images = {
   `,
   post_trial_gap: 0
 };
+
+// Word encoding instructions.
 
 var study_instructions_words = {
   type: "html-keyboard-response",
@@ -372,6 +398,8 @@ var study_instructions_words = {
   post_trial_gap: 0
 };
 
+// Image and word encoding instructions.
+
 var study_instructions_images_words = {
   type: "html-keyboard-response",
   stimulus: `
@@ -388,6 +416,8 @@ var study_instructions_images_words = {
   post_trial_gap: 0
 };
 
+// Image recognition test instructions.
+
 var test_instructions_images_recog = {
   type: "html-keyboard-response",
   stimulus: `
@@ -401,6 +431,8 @@ var test_instructions_images_recog = {
   post_trial_gap: 0
 };
 
+// Image recall test instructions.
+
 var test_instructions_images_recall = {
   type: "html-keyboard-response",
   stimulus: `
@@ -411,6 +443,8 @@ var test_instructions_images_recall = {
   `,
   post_trial_gap: 0
 };
+
+// Word recall test instructions.
 
 var test_instructions_words = {
   type: "html-keyboard-response",
@@ -423,6 +457,8 @@ var test_instructions_words = {
   post_trial_gap: 0
 };
 
+// Image and word recall test instructions.
+
 var test_instructions_images_words = {
   type: "html-keyboard-response",
   stimulus: `
@@ -434,6 +470,8 @@ var test_instructions_images_words = {
   post_trial_gap: 0
 };
 
+/* Fixation cross timeline variable. */
+
 var fixation = {
   type: 'html-keyboard-response',
   stimulus: '<div style="font-size:60px;">+</div>',
@@ -442,6 +480,8 @@ var fixation = {
 };
 
 /* task questions and hit feedback */
+
+// Need to rethink these.
 
 var mid_task_questions = {
   timeline:[
@@ -476,6 +516,9 @@ var mid_task_questions = {
     }
   };
 
+/* Creating the specific timeline parameters for each encoding and test phase. */
+
+// Encoding images.
 
 var encoding_images = {
   timeline: [fixation, {
@@ -502,6 +545,8 @@ var encoding_images = {
   timeline_variables: study_images_timeline,
   sample: {type: 'fixed-repetitions', size: 1}
 };
+
+// Testing recognition for images.
 
 var testing_images_recog = {
   timeline: [fixation, {
@@ -541,6 +586,8 @@ var testing_images_recog = {
   sample: {type: 'fixed-repetitions', size: 1}
 };
 
+// Testing recall for images.
+
 var testing_images_recall = {
   timeline: [{
     type: 'survey-text',
@@ -551,6 +598,8 @@ var testing_images_recall = {
     response_ends_trial: true
   }]
 };
+
+// Encoding words.
 
 var encoding_words = {
   timeline: [fixation, {
@@ -578,6 +627,8 @@ var encoding_words = {
   sample: {type: 'fixed-repetitions', size: 1}
 };
 
+// Testing recall for words.
+
 var testing_words = {
   timeline: [{
     type: 'survey-text',
@@ -588,6 +639,8 @@ var testing_words = {
     response_ends_trial: true
   }]
 };
+
+// Encoding images and words.
 
 var encoding_images_words = {
   timeline: [fixation, {
@@ -615,6 +668,8 @@ var encoding_images_words = {
   sample: {type: 'fixed-repetitions', size: 1}
 };
 
+// Testing recall for images and words.
+
 var testing_images_words = {
   timeline: [{
     type: 'survey-text',
@@ -625,6 +680,8 @@ var testing_images_words = {
     response_ends_trial: true
   }]
 };
+
+/* Creating a function to randomly assign whether an image encoding phase will be followed by a recall or recognition test. */
 
 function recallOrRecog() {
 
@@ -639,15 +696,25 @@ function recallOrRecog() {
   return decision
 }
 
+/* Creating timelines for each possible design: image encoding with recognition test, image encoding with recall test, word encoding with recall test, image and word encoding with recall test. */
+
+// Images.
+
 var images_node = recallOrRecog()
+
+// Words.
 
 var words_node = {
   timeline: [study_instructions_words, encoding_words, test_instructions_words, testing_words]
 }
 
+// Images and words.
+
 var images_words_node = {
   timeline: [study_instructions_images_words, encoding_images_words, test_instructions_images_words, testing_images_words]
 }
+
+/* MTurk debrief variable */
 
 var debrief_mturk = {
       type: "external-html",
@@ -667,6 +734,8 @@ var timeline = [];
 // timeline.push(preload);
 // timeline.push(consent);
 // timeline.push(demographics);
+
+// Random assignment of what design a subject will receive.
 
 experiment_assignment = jsPsych.randomization.sampleWithoutReplacement(Array(0, 1, 2), 1)
 

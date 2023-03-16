@@ -1,0 +1,46 @@
+---
+title: "data_processing"
+editor: source
+---
+
+```{r}
+library(tidyverse)
+library(jsonlite)
+```
+
+```{r}
+
+image_names <- list.files("assets/object_images")
+
+file_paths <- paste0("assets/object_images/", image_names)
+
+words <- substr(image_names, 1, nchar(image_names) - 5) %>%
+  unique()
+
+words <- gsub("_", " ", words)
+
+words <- toupper(words)
+
+image_df <- tibble(
+  image_name = image_names,
+  file_path = file_paths,
+  word = rep(words, each = 2),
+  variant = rep(c(1, 2), times = length(image_names)/2)
+)
+
+
+```
+
+```{r}
+
+JSON_images <- toJSON(image_df, auto_unbox = TRUE, pretty=pretty)
+JSON_images <- paste0("var object_images = ",JSON_images,";")
+write(JSON_images, file='object_images.js')
+
+JSON_words <- toJSON(words ,auto_unbox = TRUE, pretty=pretty)
+JSON_words <- paste0("var object_words = ",JSON_words,";")
+write(JSON_words,file='object_words.js')
+
+```
+
+

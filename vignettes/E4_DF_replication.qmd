@@ -38,7 +38,7 @@ library(tidyr)
 ```{r}
 # Read the text file from JATOS ...
 
-read_file('data/E4/jatos_results_20230223202648.txt') %>%
+read_file('data/E4/jatos_results_20230323180709.txt') %>%
   
   # ... split it into lines ...
   

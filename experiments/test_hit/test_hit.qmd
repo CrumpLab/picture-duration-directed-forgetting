@@ -1,0 +1,205 @@
+---
+title: "test hit"
+author: "Matt Crump"
+execute: 
+  eval: false
+---
+
+## Notes
+
+Amazon charges 20% when a hit has less than 10 assignments, and 40% when it has more. 
+
+1. Create a qualification that can be assigned to workers who have completed the task
+2. Make a new hit with max 9 assignments, and any qualifications
+3. Approve assignments
+4. Update worker qualifications (they will not be able to repeat when you make another hit)
+
+5. When the hit is complete, save everything.
+6. Make another hit with 9 assignments and repeat the process
+
+
+Considerations:
+
+- The vanilla jatos html code mturk should be modified with better messaging for participants
+- Participants are currently not allowed to preview the hit in a meaningful way. They can only accept the HIT, then get the link, at which point they are on the hook for completing the task. If they abandon it, then they risk worsening their HIT completion rate.
+  - we could pay a small rate (.05) for starting the study, and pay all workers who finish a bonus for the rest.
+  - we could provide a demo link
+  - we can improve the wording in the preview page to help participants understand the requirements of the task
+
+
+
+## Load Library, set keys
+
+Load library, set keys, work in sandbox, check account balance to verify keys work.
+
+```{r, eval = FALSE}
+library(pyMTurkR)
+
+# load aws access key id, and secret key
+
+#Sys.setenv(AWS_ACCESS_KEY_ID = "MY_ACCESS_KEY")
+#Sys.setenv(AWS_SECRET_ACCESS_KEY = "MY_SECRET_ACCESS_KEY")
+
+# test to make sure it works
+options(pyMTurkR.sandbox = TRUE)
+AccountBalance()
+
+```
+
+## Sandbox testing
+
+Use `sandbox_jatos_HTMLquestion.xml` for sandbox testing. This should ensure the form action resolves to `action="https://workersandbox.mturk.com/mturk/externalSubmit">`
+
+## Create Qualifications
+
+
+
+```{r, eval=FALSE}
+## RUN ONCE TO CREATE HIT ##
+
+# Create a qualification to prevent repeat workers
+no_repeat_qualification <- CreateQualificationType(
+  name = "Completed this task",
+  description = "This qualification is for people who have already completed this survey",
+  status = "Active",
+  keywords = "completed survey"
+)
+
+# copy from console: 30M3H7B0K68OA1GLNDCID458STNFUW
+
+
+# Generate list of qualifications
+
+quals.list <- list(
+    list(QualificationTypeId = no_repeat_qualification$QualificationTypeId,
+         Comparator = "DoesNotExist",
+         ActionsGuarded = "DiscoverPreviewAndAccept"
+    ),
+    list(QualificationTypeId = "00000000000000000071",
+         Comparator = "EqualTo",
+         LocaleValues = list(Country = "US"),
+         ActionsGuarded = "DiscoverPreviewAndAccept"
+    )
+)
+
+qual.req <- GenerateQualificationRequirement(quals.list)
+```
+
+## Create Hit
+
+`jatos_HTMLquestion.xml` contains a template file where the mturk html from JATOS can be inserted. This HTML controls how the HIT is displayed to the participants, including instructions, and a text box to copy the completion code when finished.
+
+IN SANDBOX MODE, use `sandbox_jatos_HTMLquestion.xml`
+
+The `GenerateHTMLQuestion()` function wraps the `jatos_HTMLquestion.xml` with the HTMLquestion type structure, and creates a list object in R. The contents of the `$string` property can be applied to the `question` input in `CreateHIT()`. 
+
+```{r, eval= FALSE}
+
+# create HTMLQuestion
+xml_HTMLquestion <- GenerateHTMLQuestion(file="sandbox_jatos_HTMLquestion.xml")
+# xml_HTMLquestion$string    # contains the rendered string for question
+
+# Create the HIT
+# Assign to object with same name as annotation
+
+my_hit <- CreateHIT(
+  hit.type = NULL, #not using this
+  question = xml_HTMLquestion$string,  # set from above
+  expiration = seconds(days = 4),  # time in seconds before HIT expires
+  assignments = 9, # number of assignments in the hit
+  assignment.review.policy = NULL,
+  hit.review.policy = NULL,
+  annotation = "MattTestBMarch2023", #not visible to workers, can be used to tag hit
+  unique.request.token = NULL,
+  title = "2nd test of the API to make a HIT", #max 128 characters
+  description = "This is a test of pymturkR.", #max 2000 characters, visible to workers
+  reward = "1.0", # amount to pay in US dollars
+  duration = seconds(hours = 1), # seconds, string, amount of time workers get to complete the hit once started
+  keywords = NULL,
+  auto.approval.delay = NULL,
+  qual.req = qual.req, # a list containing one or more qualification requirements
+  hitlayoutid = NULL,
+  hitlayoutparameters = NULL,
+  verbose = getOption("pyMTurkR.verbose", TRUE)
+)
+
+#my_hit
+
+```
+
+## Get completed Assignments
+
+```{r, eval=FALSE}
+assignments <- GetAssignments(hit = my_hit$HITId)
+```
+## Approve Assignments
+
+```{r,eval=FALSE}
+ApproveAssignments(assignments=assignments$AssignmentId,
+                   feedback = "Thank you for participating")
+```
+
+## Add no repeat qualification to workers
+
+```{r,eval=FALSE}
+AssignQualification(qual = no_repeat_qualification$QualificationTypeId,
+                    workers = unique(assignments$WorkerId),
+                    value = 1)
+```
+
+## Save batch
+
+We want to save info from every completed hit, which will have up to 9 assignments. Need to be very careful not to overwrite old batches etc.
+
+It could make sense to make new hits within a batch from hit_type, which would group Hits underneath.
+
+```{r, eval = FALSE}
+my_batches <- list() # run once to create
+```
+
+```{r, eval = FALSE}
+my_batches$batch_1$GetHit  <- GetHIT(my_hit$HITId)
+my_batches$batch_1$GetAssignments  <- GetAssignments(hit = my_hit$HITId)
+
+#my_batches$batch_1$GetHit
+#my_batches$batch_1$GetAssignments
+
+save.image(file="test_hit.RData")
+
+```
+
+
+
+
+# Clean up
+
+## Disable and Delete hit
+
+After running a batch of 9 assignments for one hit, disable and delete the hit
+
+```{r, eval = FALSE}
+
+DisableHIT(hit = my_hit$HITs$HITId)
+DeleteHIT(hit = my_hit$HITs$HITId)
+
+```
+
+## Displose of qualification
+
+This will delete the qualificationType, and qualification scores for all workers, and all records.
+
+Do this after completing all batches of the HIT for a single study.
+
+```{r, eval= FALSE}
+
+DisposeQualificationType(no_repeat_qualification$QualificationTypeId)
+
+```
+
+
+
+
+
+
+
+

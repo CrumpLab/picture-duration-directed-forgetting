@@ -246,7 +246,7 @@ jsPsych.data.addProperties({ID: rand_subject_id});
 
 /* experiment parameters */
 
-var runshort = true;
+var runshort = false;
 if(runshort == true){
   study_timeline = study_timeline.slice(0,10);
   test_timeline = test_timeline.slice(0,10);
@@ -502,7 +502,7 @@ timeline.push(mid_task_questions);
 /* Run */
 
 var run_simulation = false;
-var run_jatos = false;
+var run_jatos = true;
 
 if(run_jatos === true){
   jatos.onLoad(function() {

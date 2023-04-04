@@ -1,0 +1,99 @@
+---
+title             : "Directed forgetting for pictures: replication attempt"
+shorttitle        : "Directed forgetting for pictures"
+
+author: 
+  - name          : "Drew Shives"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "my@email.com"
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - "Conceptualization"
+      - "Writing - Original Draft Preparation"
+      - "Writing - Review & Editing"
+      - "Software"
+      - "Methodology"
+      - "Formal analysis"
+  - name          : "Patrick Ihejirka"
+    affiliation   : "2"
+    role:
+      - "Conceptualization"
+      - "Methodology"
+      - "Writing - Original Draft Preparation"
+  - name          : "Wesley Huang"
+    affiliation   : "2"
+    role:
+      - "Conceptualization"
+      - "Methodology"
+  - name          : "Matthew J. C. Crump"
+    affiliation   : "1,2"
+    role:
+      - "Supervision"
+      - "Writing - Review and Editing"
+
+affiliation:
+  - id            : "1"
+    institution   : "The Graduate Center of the City University of New York"
+  - id            : "2"
+    institution   : "Brooklyn College of the City University of New York"
+
+authornote: |
+  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+  Enter author note here.
+
+abstract: |
+  150 - 200 words describing the project
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : "references.bib"
+
+floatsintext      : no
+linenumbers       : yes
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Experiment 1
+
+## Methods
+
+### Participants
+
+### Material
+
+### Procedure
+
+### Data analysis
+
+## Results
+
+## Discussion
+
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::

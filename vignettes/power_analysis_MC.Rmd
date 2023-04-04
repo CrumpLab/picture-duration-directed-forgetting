@@ -1,0 +1,256 @@
+---
+title: "power_analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{power_analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+Conduct a simulation-based power analysis.
+
+## Set predictions
+
+Estimate power of the Ahmad, Tan, and Hockley (2019) design to detect a 6-7% DF effect in the exemplar condition.
+
+
+```{r}
+library(tidyverse)
+
+# save results to this list
+power_analysis <- list()
+
+# predictions for mean accuracy in each condition (see paper for rationale)
+power_analysis$predictions = c(.9,.8,.9,.74)
+```
+
+## Graph Predictions
+
+```{r}
+
+# graph
+power_analysis$predicted_means <- data.frame(
+  encoding_cue = rep(c("R","F"), each = 2),
+  test_condition = rep(c("Novel","Exemplar"),2),
+  accuracy = power_analysis$predictions
+)
+
+power_analysis$prediction_graph <- ggplot(
+  power_analysis$predicted_means,
+  aes(x=test_condition,y = accuracy, fill=encoding_cue))+
+  geom_bar(stat="identity", position="dodge")+
+  geom_hline(yintercept=.5)+
+  coord_cartesian(ylim=c(.4,1))+
+  scale_y_continuous(breaks = seq(0.4,1,.1))+
+  ylab("Proportion Correct")+
+  xlab("Lure Type")+
+  scale_fill_discrete(name = " Encoding \n Instruction") +
+  ggtitle("Predictions for mean accuracy \n as a function of Stimulus Duration, \n Encoding Instruction, and Lure Type")
+
+power_analysis$prediction_graph
+
+```
+
+```{r}
+
+# function to generate simulated data for one subject
+# we use the binomial to generate decisions for old/new on each trial
+# the binomial probability of success is set to the mean accuracy for each condition
+# we simulate all 120 trials for a single simulated subject.
+create_n_subjects <- function(n, predictions) {
+  all_data <- data.frame()
+  for (i in 1:n) {
+    subject_data <- data.frame(
+      sub_num = i,
+      encoding_cue = rep(c("R", "F"), each = 60),
+      test_condition = rep(rep(c("Novel", "Exemplar"), each = 30), 2),
+      accuracy = rbinom(120, 1, rep(predictions, each = 30))
+    )
+    all_data <- rbind(all_data, subject_data)
+  }
+  
+  all_data <- all_data %>%
+    mutate(
+      sub_num = as.factor(sub_num),
+      encoding_cue = as.factor(encoding_cue),
+      test_condition = as.factor(test_condition)
+    )
+  
+  return(all_data)
+  
+}
+
+
+# Calculate proportion of values less than alpha
+proportion_sig <- function(ps) {
+  length(ps[ps < .05]) / length(ps)
+}
+```
+
+## Run simulation
+
+We run a simulation of the power of our design to detect effects of interest with n = some number of subjects
+
+```{r}
+
+
+power_analysis$all_sim_data <- data.frame()
+num_subs <- 5
+num_sims <- 100
+
+for(i in 1:num_sims){
+  
+  #print(i)
+  simulated_data <- create_n_subjects(n=num_subs, predictions = power_analysis$predictions)
+  
+  # ensure factors are factor class
+  simulated_data <- simulated_data %>%
+    mutate_at(c("sub_num","encoding_cue","test_condition"), factor) 
+  
+  # get means for anova
+  ANOVA_means <- simulated_data %>%
+    group_by(sub_num,encoding_cue,test_condition) %>%
+    summarize(mean_accuracy =  mean(accuracy), .groups="drop")
+  
+  # conduct anova
+  sim_anova <- aov(mean_accuracy ~ encoding_cue*test_condition + 
+                     Error(sub_num/(encoding_cue*test_condition)), data = ANOVA_means)
+  save_summary <- summary(sim_anova)
+  
+  # grab p values
+  cue <- save_summary$`Error: sub_num:encoding_cue`[[1]]$`Pr(>F)`[1]
+  test <- save_summary$`Error: sub_num:test_condition`[[1]]$`Pr(>F)`[1]
+  cue_test <- save_summary$`Error: sub_num:encoding_cue:test_condition`[[1]]$`Pr(>F)`[1]
+
+  
+  t_df <- data.frame(cue,
+                     test,
+                     cue_test)
+  
+  power_analysis$all_sim_data <- rbind(power_analysis$all_sim_data,t_df)
+  
+}
+
+# proportion significant for relevant effects
+power_analysis$sim_power <- apply(power_analysis$all_sim_data,2,proportion_sig)
+tibble::enframe(power_analysis$sim_power)
+
+```
+
+## Graph power for multiple n
+
+```{r}
+
+# save results to this list
+power_analysis <- list()
+
+# predictions for mean accuracy in each condition (see paper for rationale)
+power_analysis$predictions = c(.9,.8,.9,.74)
+
+power_analysis$multiple_n_sims <- data.frame()
+
+#num_subs <- 50
+num_sims <- 100
+
+for(num_subs in c(10, 20,30,40,50,60,70,80,90,100)){
+  print(num_subs)
+  power_analysis$all_sim_data <- data.frame()
+  for(i in 1:num_sims){
+    
+    #print(i)
+    simulated_data <- create_n_subjects(n=num_subs, predictions = power_analysis$predictions)
+    
+    # ensure factors are factor class
+    simulated_data <- simulated_data %>%
+      mutate_at(c("sub_num","encoding_cue","test_condition"), factor) 
+    
+    # get means for anova
+    ANOVA_means <- simulated_data %>%
+      group_by(sub_num,encoding_cue,test_condition) %>%
+      summarize(mean_accuracy =  mean(accuracy), .groups="drop")
+    
+    # conduct anova
+    sim_anova <- aov(mean_accuracy ~ encoding_cue*test_condition + 
+                       Error(sub_num/(encoding_cue*test_condition)), data = ANOVA_means)
+    save_summary <- summary(sim_anova)
+    
+    # grab p values
+    cue <- save_summary$`Error: sub_num:encoding_cue`[[1]]$`Pr(>F)`[1]
+    test <- save_summary$`Error: sub_num:test_condition`[[1]]$`Pr(>F)`[1]
+    cue_test <- save_summary$`Error: sub_num:encoding_cue:test_condition`[[1]]$`Pr(>F)`[1]
+  
+    
+    t_df <- data.frame(cue,
+                       test,
+                       cue_test)
+    
+    power_analysis$all_sim_data <- rbind(power_analysis$all_sim_data,t_df)
+    
+  }
+  
+  # proportion significant for relevant effects
+  power_analysis$sim_power <- apply(power_analysis$all_sim_data,2,proportion_sig)
+  
+  multiple_n_results <- tibble::enframe(power_analysis$sim_power) %>%
+    mutate(n_subs = num_subs,
+           n_sims = num_sims,
+           Remember_Novel = power_analysis$predictions[1],
+           Remember_Exemplar = power_analysis$predictions[2],
+           Forget_Novel = power_analysis$predictions[3],
+           Forget_Exemplar = power_analysis$predictions[4])
+  
+  power_analysis$multiple_n_sims <- rbind(power_analysis$multiple_n_sims,multiple_n_results)
+  
+}
+
+power_analysis$multiple_n_sims
+
+ggplot(power_analysis$multiple_n_sims,
+       aes(x=n_subs,
+           y=value,
+           group = name,
+           color = name)) +
+  geom_line()+
+  geom_point()
+
+
+```
+
+```{r, eval = FALSE}
+# gut checks on simulation
+ggplot(
+  ANOVA_means,
+  aes(x =test_condition,
+      y =mean_accuracy,
+      group = encoding_cue,
+      fill = encoding_cue))+
+  geom_bar(stat="identity", position = 'dodge')+
+  facet_wrap(~sub_num)
+
+ggplot(
+  ANOVA_means,
+  aes(x =test_condition,
+      y =mean_accuracy,
+      group = encoding_cue,
+      fill = encoding_cue))+
+  geom_bar(stat='summary',  position = 'dodge')
+
+```
+
+
+
+## save out
+
+```{r}
+#save.image("data/power.RData")
+```
+

@@ -6,6 +6,7 @@ project:
     - "*.qmd"
     - "*.Rmd"
     - "!posters/"
+    - "!manuscript/"
 
 website:
   title: "picture-duration-directed-forgetting"
